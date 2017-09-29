@@ -1,0 +1,436 @@
+{
+	"name": "root",
+	"endpoint": "",
+	"desc": "根",
+	"prompt" : "list",
+    "subcommand": [
+        {
+            "name": "login",
+            "endpoint": "/authenticate/",
+            "desc": "登录",
+            "prompt" : "none"
+        },
+        {
+            "name": "sshkeys",
+            "endpoint": "/sshkey/{container}/",
+            "desc": "SSH公钥",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "SecurityAPI-listSSHKeys",
+					"endpoint": "/sshkey/{container}/",
+		            "desc": "列出SSH公钥",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showsshkeys",
+							"endpoint": "show",
+				            "desc": "当前所有已创建的SSH公钥",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-createSSHKeyForUI",
+					"endpoint": "/sshkey/",
+		            "desc": "上传公钥",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtsshkeyname",
+							"endpoint": "input",
+				            "desc": "请输入Key名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtsshkeypath",
+							"endpoint": "input",
+				            "desc": "请输入文件本地或http完整路径",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-deleteSSHKey",
+					"endpoint": "/sshkey/{name}",
+		            "desc": "删除公钥",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmsshkeyname",
+							"endpoint": "input",
+				            "desc": "请输入要删除的Key名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }
+	    	]
+        },
+        {
+            "name": "shapes",
+            "endpoint": "/shape/",
+            "desc": "机型(Shape)",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "CommonAPI-listShape",
+					"endpoint": "/shape/",
+		            "desc": "列出公共机型",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showshapes",
+							"endpoint": "show",
+				            "desc": "当前所有可提供服务的shape",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            }
+	    	]
+        },
+        {
+            "name": "oscontainers",
+            "endpoint": "/machineimage/",
+            "desc": "操作系统",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "CommonAPI-listOSImages",
+					"endpoint": "/machineimage/{container}/",
+		            "desc": "列出所有OS镜像",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showosimages",
+							"endpoint": "show",
+				            "desc": "当前所有OS镜像",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },			
+				{
+					"name": "CommonAPI-listMyOSImages",
+					"endpoint": "/machineimage/{container}/",
+		            "desc": "列出我的OS镜像",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showmyosimages",
+							"endpoint": "show",
+				            "desc": "当前我的OS镜像",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            }
+	    	]
+        },
+        {
+            "name": "computeinstances",
+            "endpoint": "/instance/{container}",
+            "desc": "计算实例",
+            "prompt" : "list",
+            "subcommand" : [
+				{
+					"name": "ComputeAPI-listComputes",
+					"endpoint": "/instance/{container}",
+		            "desc": "列出计算实例",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showcomputeinss",
+							"endpoint": "show",
+				            "desc": "当前所有已创建的计算实例",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-viewComputes",
+					"endpoint": "/instance/{name}",
+		            "desc": "查看计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "viewcomputeins",
+							"endpoint": "input",
+				            "desc": "请输入计算实例名",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }	            
+	    	]
+        },
+        {
+            "name": "StorageAPI",
+            "endpoint": "/storage/volume/{container}/",
+            "desc": "存储",
+            "prompt" : "list",
+            "subcommand" : [
+				{
+					"name": "StorageAPI-listStorageVolumns",
+					"endpoint": "/storage/volume/{container}/",
+		            "desc": "列出存储盘",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showstoragevolumns",
+							"endpoint": "show",
+				            "desc": "当前所有已创建的存储盘",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-viewStorageVolumns",
+					"endpoint": "/storage/volume/{name}",
+		            "desc": "查看存储盘",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "viewstoragename",
+							"endpoint": "input",
+				            "desc": "请输入存储卷名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-createStorageBootVolumns",
+					"endpoint": "/storage/volume/",
+		            "desc": "创建启动盘",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "storagebootsize",
+							"endpoint": "input",
+				            "desc": "请直接输入要创建的存储盘大小数值, 单位默认G",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-createStorageBlankVolumns",
+					"endpoint": "/storage/volume/",
+		            "desc": "创建空盘",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "storageblanksize",
+							"endpoint": "input",
+				            "desc": "请直接输入要创建的存储盘大小数值, 单位默认G",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-createStorageAttachments",
+					"endpoint": "/storage/attachment/",
+		            "desc": "绑定卷到计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtstorageattname",
+							"endpoint": "input",
+				            "desc": "请输入要附加的存储卷名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+				        	"name": "tocrtattachinsname",
+							"endpoint": "input",
+						    "desc": "请输入要绑定的计算实例",
+						    "prompt" : "input"
+				        },
+		            	{
+				        	"name": "tocrtattachinsnameidx",
+							"endpoint": "input",
+						    "desc": "请输入要绑定到第几个位置(数字1-9)",
+						    "prompt" : "input"
+				        }
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-deleteStorageVolumns",
+					"endpoint": "/storage/volume/{name}",
+		            "desc": "删除存储卷",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "deletestoragevolname",
+							"endpoint": "input",
+				            "desc": "请输入要删除的存储卷名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-deleteStorageAttachment",
+					"endpoint": "/storage/attachment/{name}",
+		            "desc": "解除存储绑定关系",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "deletestorageattachname",
+							"endpoint": "input",
+				            "desc": "请输入要解除关系的Attachment Name，可以通过查看存储卷获得",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }
+            ]
+        },
+        {
+            "name": "listnetworks",
+            "endpoint": "/network/v1/ipnetwork/{container}/",
+            "desc": "网络",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "NetworkAPI-listSharedFixIPs",
+					"endpoint": "/ip/reservation/{container}/",
+		            "desc": "经典网络-列出固定IP",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "sn_showfixedip",
+							"endpoint": "show",
+				            "desc": "当前所有固定IP列表",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+				{
+					"name": "NetworkAPI-createSharedRandomIP",
+					"endpoint": "/ip/reservation/",
+		            "desc": "经典网络-创建随机IP",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "sn_crtrandomip",
+							"endpoint": "input",
+				            "desc": "请输入计算实例的vcable_id的值,可通过查看实例获取",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	
+				{
+					"name": "NetworkAPI-createSharedFixIP",
+					"endpoint": "/ip/reservation/",
+		            "desc": "经典网络-创建固定IP",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "sn_crtfixedip",
+							"endpoint": "input",
+				            "desc": "请输入经典网络下的固定IP名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	
+				{
+					"name": "NetworkAPI-deleteSharedFixIP",
+					"endpoint": "/ip/reservation/{name}",
+		            "desc": "经典网络-删除固定IP",
+		            "prompt" : "input",
+		            "subcommand" : [
+	            		{
+		            		"name": "sn_rmfixedip",
+							"endpoint": "input",
+				            "desc": "请输入经典网络下要删除掉的固定IP名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	                        
+				{
+					"name": "NetworkAPI-listIPNFixIPs",
+					"endpoint": "/network/v1/ipreservation/{container}/",
+		            "desc": "IP网络-列出固定IP",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "ipn_showfixedip",
+							"endpoint": "show",
+				            "desc": "当前所有固定IP列表",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+				{
+					"name": "NetworkAPI-createIPNFixIP",
+					"endpoint": "/network/v1/ipreservation/",
+		            "desc": "IP网络-创建固定IP",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "ipn_crtfixedip",
+							"endpoint": "input",
+				            "desc": "请输入经典网络下的固定IP名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	
+				{
+					"name": "NetworkAPI-deleteIPNFixIP",
+					"endpoint": "/network/v1/ipreservation/{name}",
+		            "desc": "IP网络-删除固定IP",
+		            "prompt" : "input",
+		            "subcommand" : [
+	            		{
+		            		"name": "ipn_rmfixedip",
+							"endpoint": "input",
+				            "desc": "请输入经典网络下要删除掉的固定IP名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "NetworkAPI-listIPN",
+					"endpoint": "/network/v1/ipnetwork/{container}/",
+		            "desc": "IP网络-列出IP网络",
+		            "prompt" : "show",
+		            "subcommand" : [
+	            		{
+		            		"name": "ipn_showipn",
+							"endpoint": "show",
+				            "desc": "当前所有已创建的IP网络",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },	            
+				{
+					"name": "NetworkAPI-createIPN",
+					"endpoint": "/network/v1/ipnetwork/",
+		            "desc": "IP网络-创建IP网络",
+		            "prompt" : "input",
+		            "subcommand" : [
+	            		{
+		            		"name": "ipn_crtipn",
+							"endpoint": "input",
+				            "desc": "请输入IP网络名称",
+				            "prompt" : "input"
+		            	},
+	            		{
+		            		"name": "ipn_crtipnrange",
+							"endpoint": "input",
+				            "desc": "请输入IP网络地址段(必须符合CIDR IPv4标准)",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },           
+				{
+					"name": "NetworkAPI-deleteIPN",
+					"endpoint": "/network/v1/ipnetwork/{name}",
+		            "desc": "IP网络-删除IP网络",
+		            "prompt" : "input",
+		            "subcommand" : [
+	            		{
+		            		"name": "ipn_rmipn",
+							"endpoint": "input",
+				            "desc": "请输入要删除的IP网络名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }	            
+	        ]        
+        }
+    ]
+}
