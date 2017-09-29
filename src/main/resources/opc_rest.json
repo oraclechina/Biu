@@ -157,7 +157,53 @@
 				            "prompt" : "input"
 		            	}
 		            ]
-	            }	            
+	            },
+				{
+					"name": "ComputeAPI-createComputeInstance",
+					"endpoint": "/launchplan/",
+		            "desc": "创建计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtcomputeinsname",
+							"endpoint": "input",
+				            "desc": "请输入计算唯一实例名",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "crtcomputeinsshape",
+							"endpoint": "input",
+				            "desc": "请输入实例型号",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtcomputeinsos",
+							"endpoint": "input",
+				            "desc": "请输入操作系统名",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "crtcomputeinssshpk",
+							"endpoint": "input",
+				            "desc": "请输入SSH公钥名",
+				            "prompt" : "input"
+		            	}		            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-deleteComputeInstance",
+					"endpoint": "/instance/{name}",
+		            "desc": "删除计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmcomputeinsname",
+							"endpoint": "input",
+				            "desc": "请输入要删除的计算唯一实例名",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
+	            }	                        
 	    	]
         },
         {
@@ -285,6 +331,34 @@
             "prompt" : "list",
 			"subcommand" : [
 				{
+					"name": "NetworkAPI-createSharedRandomIP",
+					"endpoint": "/ip/association/",
+		            "desc": "经典网络-绑定计算实例到随机IP",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "sn_crtrandomip",
+							"endpoint": "input",
+				            "desc": "请输入计算实例的vcable_id的值,可通过查看计算实例获取",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "NetworkAPI-deleteSharedRandomIP",
+					"endpoint": "/ip/association/{name}",
+		            "desc": "经典网络-解除IP绑定关系",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "sn_rmrandomip",
+							"endpoint": "input",
+				            "desc": "请输入Public IP Association,可通过查看计算实例获取",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	            	
+				{
 					"name": "NetworkAPI-listSharedFixIPs",
 					"endpoint": "/ip/reservation/{container}/",
 		            "desc": "经典网络-列出固定IP",
@@ -299,20 +373,6 @@
 		            ]
 	            },
 				{
-					"name": "NetworkAPI-createSharedRandomIP",
-					"endpoint": "/ip/reservation/",
-		            "desc": "经典网络-创建随机IP",
-		            "prompt" : "input",
-		            "subcommand" : [
-		            	{
-		            		"name": "sn_crtrandomip",
-							"endpoint": "input",
-				            "desc": "请输入计算实例的vcable_id的值,可通过查看实例获取",
-				            "prompt" : "input"
-		            	}
-		            ]
-	            },	
-				{
 					"name": "NetworkAPI-createSharedFixIP",
 					"endpoint": "/ip/reservation/",
 		            "desc": "经典网络-创建固定IP",
@@ -322,6 +382,12 @@
 		            		"name": "sn_crtfixedip",
 							"endpoint": "input",
 				            "desc": "请输入经典网络下的固定IP名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "sn_crtfixediptype",
+							"endpoint": "input",
+				            "desc": "是否为固定IP, 默认为true, 否请输入false",
 				            "prompt" : "input"
 		            	}
 		            ]

@@ -42,13 +42,19 @@ public class ComputeAPI {
 		return vcalbeid;
 	}
 	
-	public static String createComputeInstance(String path, String shape, String imagelist, String keyname) throws Exception {
-		String label = "Biu_" + BiuUtils.getRandomString(3);
+	public static JSONObject createComputeInstance(String path, String label, String shape, String imagelist, String keyname) throws Exception {
 		String name = "/" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + label;
 		String jsonbody = ComputeEntity.build(label, name, shape, "/" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + keyname, imagelist);
 		JsonNode node = BiuUtils.rest("post", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
 		log.debug(node.getObject());
-		return node.getObject().toString();
+		return node.getObject();
+	}
+	
+	public static JSONObject deleteComputeInstance(String path, String name) throws Exception {
+		path = BiuUtils.kv(path, "name", BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + name);
+		log.debug(path);
+		BiuUtils.rest("delete", BasicAuthenticationAPI.ACCEPT_COMPUTE, path);
+		return BiuUtils.getSucReturn("Compute");
 	}
 	
 }

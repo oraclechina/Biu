@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.oracle.cloud.biu.api.BasicAuthenticationAPI;
 import com.oracle.cloud.biu.api.ComputeAPI;
+import com.oracle.cloud.biu.api.NetworkAPI;
 import com.oracle.cloud.biu.entity.KV;
 import com.oracle.cloud.biu.utils.BiuUtils;
 import com.thoughtworks.xstream.XStream;
@@ -57,7 +58,7 @@ public class Biu {
 			BasicAuthenticationAPI.setUserInfoForLogin(m.get("cloud_tenant"), m.get("endpoint"), m.get("cloud_domain"),
 					m.get("cloud_username"), m.get("cloud_password"));
 			BasicAuthenticationAPI.login(m.get("login"));
-//			ComputeAPI.listComputes(m.get("computeinstances"), false);
+//			NetworkAPI.listNetworkAssociations(m.get("list_network_associations"));
 			showInteractiveMenu(MENU, MENU);
 			
 			
@@ -99,8 +100,7 @@ public class Biu {
 			// NetworkAPI.listSharedFixIPs(m.get("shared_fixip"));
 			// IP ip = NetworkAPI.createSharedFixIP(m.get("create_fixip"));
 			// StorageAPI.listStorageVolumns(m.get("storagevolumns"));
-			// ComputeAPI.createComputeInstance("oc3",
-			// "/oracle/public/OL_7.2_UEKR4_x86_64", m.get("createcompute"));
+			// ComputeAPI.createComputeInstance("oc3", "/oracle/public/OL_7.2_UEKR4_x86_64", m.get("createcompute"));
 			//
 			// String vcable =
 			// ComputeAPI.getVcable(m.get("viewcompute"),

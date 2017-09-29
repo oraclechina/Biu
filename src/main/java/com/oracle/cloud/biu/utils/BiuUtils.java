@@ -25,6 +25,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.oracle.cloud.biu.Biu;
 import com.oracle.cloud.biu.api.BasicAuthenticationAPI;
+import com.oracle.cloud.biu.api.NetworkAPI;
 import com.oracle.cloud.biu.api.StorageAPI;
 import com.oracle.cloud.biu.entity.AsciiTableEntity;
 import com.oracle.cloud.biu.entity.KV;
@@ -38,6 +39,7 @@ public class BiuUtils extends EncryptUtil {
 
 	public static Map<String, String> propsMap = null;
 	public static Map<String, KV> storageAttachmentRelationMap = null;
+	public static Map<String, KV> networkAttachmentRelationMap = null;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Map<String, String> getProps() {
@@ -161,6 +163,9 @@ public class BiuUtils extends EncryptUtil {
 			tobj = jsonobj.opt("result");
 			if (null != tobj)
 				flag = "hasResult";
+			tobj = jsonobj.opt("instances");
+			if (null != tobj)
+				flag = "hasLunchplan";
 			
 			if (method.indexOf("view") > -1)
 				flag = "hasView";
@@ -171,6 +176,8 @@ public class BiuUtils extends EncryptUtil {
 				en = goHasMessage(jsonobj.getString("message"));
 			else if ("hasResult".equals(flag))
 				en = goHasResult(method, jsonobj, jsonobj.getJSONArray("result"));
+			else if ("hasLunchplan".equals(flag))
+				en = goHasLunchplanResult(method, jsonobj, jsonobj.getJSONArray("instances"));
 			else if ("hasView".equals(flag))
 				en = goHasView(method, jsonobj);
 			
@@ -183,6 +190,21 @@ public class BiuUtils extends EncryptUtil {
 		return en;
 	}
 	
+	private static AsciiTableEntity goHasLunchplanResult(String method, org.json.JSONObject jsonobj, org.json.JSONArray jsonary) {
+		String[] headers = { "Name"};
+		String[][] data = new String[jsonary.length()][1];
+		int i = 0;
+		for (Object tempobj : jsonary) {
+			org.json.JSONObject obj = (org.json.JSONObject) tempobj;
+			data[i][0] = obj.getString("name");
+			i++;
+		}
+		AsciiTableEntity en = new AsciiTableEntity();
+		en.setHeader(headers);
+		en.setData(data);
+		return en;
+	}
+
 	private static AsciiTableEntity goHasView(String method, org.json.JSONObject jsonobj) {
 		AsciiTableEntity en = new AsciiTableEntity();
 		if ("com.oracle.cloud.biu.api.StorageAPI-viewStorageVolumns".equals(method))
@@ -195,6 +217,25 @@ public class BiuUtils extends EncryptUtil {
 	}
 
 	private static AsciiTableEntity goHasComputeViewResult(org.json.JSONObject obj, AsciiTableEntity en) {
+		String k = "Public IP";
+		String k2 = "Public IP Association";
+		String v = "ERROR";
+		String v2 = "";
+		if (null == networkAttachmentRelationMap) {
+			v = "ERROR";
+			v2 = "ERROR";
+		} else {
+			KV kv = networkAttachmentRelationMap.get(mask(obj.optString("vcable_id")));
+			if (null != kv) {
+				v = "Attached[" + kv.getValue() + "]";
+				v2 = mask(kv.getKey());
+			} else {
+				v = "";
+				v2 = "";
+			}
+		}
+		obj.put(k, v);
+		obj.put(k2, v2);
 		List<KV> returnA = jsonToArray(obj);
 		String[] headers = { "Key", "Value"};
 		String[][] data = new String[obj.keySet().size()][2];
@@ -280,7 +321,7 @@ public class BiuUtils extends EncryptUtil {
 		AsciiTableEntity en = new AsciiTableEntity();
 		if ("com.oracle.cloud.biu.api.StorageAPI-listStorageVolumns".equals(method)) {
 			log.debug("Go to Show Result");
-			cacheAttachementRelation(jsonArray);
+			cacheStorageAttachementRelation(jsonArray);
 			en = goHasStorageShowResult(jsonArray, en);
 			log.debug("[Done] Cached Storage Attachment Relation");
 		}
@@ -296,21 +337,31 @@ public class BiuUtils extends EncryptUtil {
 			en = goHasIPNetworkIPShowResult(jsonArray, en);
 		else if ("com.oracle.cloud.biu.api.NetworkAPI-listIPN".equals(method))
 			en = goHasIPNetworkShowResult(jsonArray, en);
-		else if ("com.oracle.cloud.biu.api.ComputeAPI-listComputes".equals(method))
+		else if ("com.oracle.cloud.biu.api.ComputeAPI-listComputes".equals(method)) {
+			cacheNetworkAttachementRelation(jsonArray);
 			en = goHasComputeInstancesShowResult(jsonArray, en);
-		else
+		} else
 			en = goHasShowResult(jsonArray, en);
 		return en;
 	}
 
 	private static AsciiTableEntity goHasComputeInstancesShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name", "State"};
-		String[][] data = new String[jsonArray.length()][2];
+		String[] headers = { "Name", "State", "Public IP"};
+		String[][] data = new String[jsonArray.length()][3];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
 			org.json.JSONObject obj = (org.json.JSONObject) tempobj;
 			data[i][0] = mask(obj.getString("name"));
 			data[i][1] = obj.getString("state");
+			if (null == networkAttachmentRelationMap) {
+				data[i][3] = "ERROR";
+			} else {
+				KV kv = networkAttachmentRelationMap.get(mask(obj.optString("vcable_id")));
+				if (null != kv)
+					data[i][2] = kv.getValue();
+				else
+					data[i][2] = "";
+			}			
 			i++;
 		}
 		en.setHeader(headers);
@@ -405,9 +456,9 @@ public class BiuUtils extends EncryptUtil {
 		return en;
 	}
 
-	private static void cacheAttachementRelation(JSONArray jsonArray) {
+	private static void cacheStorageAttachementRelation(JSONArray jsonArray) {
 		try {
-			org.json.JSONObject jsonobj = StorageAPI.listStorageAttachment(propsMap.get("lists_torage_attachment"));
+			org.json.JSONObject jsonobj = StorageAPI.listStorageAttachment(propsMap.get("list_storage_attachment"));
 			if (null == jsonobj)
 				return;
 			storageAttachmentRelationMap = new HashMap<String, KV>();
@@ -418,6 +469,26 @@ public class BiuUtils extends EncryptUtil {
 				kv.setKey(obj.optString("name"));
 				kv.setValue(obj.optString("instance_name"));
 				storageAttachmentRelationMap.put(mask(obj.optString("storage_volume_name")), kv);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void cacheNetworkAttachementRelation(JSONArray jsonArray) {
+		try {
+			org.json.JSONObject jsonobj = NetworkAPI.listNetworkAssociations(propsMap.get("list_network_associations"));
+			if (null == jsonobj)
+				return;
+			networkAttachmentRelationMap = new HashMap<String, KV>();
+			JSONArray ary = jsonobj.getJSONArray("result");
+			for (Object object : ary) {
+				org.json.JSONObject obj = (org.json.JSONObject) object;
+				KV kv = new KV();
+				kv.setKey(obj.optString("name"));
+				kv.setValue(obj.optString("ip"));
+				kv.setReserve1(obj.optString("enabled"));
+				networkAttachmentRelationMap.put(mask(obj.optString("vcable")), kv);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
