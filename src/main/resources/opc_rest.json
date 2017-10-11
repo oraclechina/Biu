@@ -67,9 +67,159 @@
 	    	]
         },
         {
+            "name": "security",
+            "endpoint": "/seclist/{container}/",
+            "desc": "安全组",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "SecurityAPI-listSecList",
+					"endpoint": "/seclist/{container}/",
+		            "desc": "列出安全组",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showseclists",
+							"endpoint": "show",
+				            "desc": "当前所有已创建的安全组",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-createSecList",
+					"endpoint": "/seclist/",
+		            "desc": "创建安全组",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtseclistname",
+							"endpoint": "input",
+				            "desc": "请输入安全组名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtseclistoutbound",
+							"endpoint": "input",
+				            "desc": "请输入安全组出口策略,deny/reject/permit",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtseclistinbound",
+							"endpoint": "input",
+				            "desc": "请输入安全组入口策略,deny/reject/permit",
+				            "prompt" : "input"
+		            	}		            			            	
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-deleteSecList",
+					"endpoint": "/seclist/{name}",
+		            "desc": "删除安全组",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmseclistname",
+							"endpoint": "input",
+				            "desc": "请输入要删除的安全组名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-createSecAssociation",
+					"endpoint": "/secassociation/",
+		            "desc": "绑定安全组到计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtsecassvcableid",
+							"endpoint": "input",
+				            "desc": "请输入计算实例的vcable_id的值,可通过查看计算实例获取",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtsecassname",
+							"endpoint": "input",
+				            "desc": "请输入要绑定的安全组名称",
+				            "prompt" : "input"
+		            	}		            			            	
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-deleteSecAssociation",
+					"endpoint": "/secassociation/{name}",
+		            "desc": "解除安全组绑定关系",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmsecassname",
+							"endpoint": "input",
+				            "desc": "请输入计算实例的vcable_id的值,可通过查看计算实例获取",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "rmsecassinsname",
+							"endpoint": "input",
+				            "desc": "请输入要解除绑定的安全组名称",
+				            "prompt" : "input"
+		            	}		            			            	
+		            ]
+	            },
+				{
+					"name": "SecurityAPI-listSecRule",
+					"endpoint": "/secrule/{container}/",
+		            "desc": "列出安全规则",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showsecrule",
+							"endpoint": "show",
+				            "desc": "当前所有已创建的安全规则",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },	 
+	            {
+					"name": "SecurityAPI-createSecRule",
+					"endpoint": "/secrule/",
+		            "desc": "创建安全规则",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtsecrulename",
+							"endpoint": "input",
+				            "desc": "请输入安全规则名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtsecruleto",
+							"endpoint": "input",
+				            "desc": "请输入目标安全组名称",
+				            "prompt" : "input"
+		            	}		            			            	
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-deleteSecRule",
+					"endpoint": "/secrule/{name}",
+		            "desc": "删除安全规则",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmseclistname",
+							"endpoint": "input",
+				            "desc": "请输入要删除的安全规则名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }	                      
+	    	]
+        },
+        {
             "name": "shapes",
             "endpoint": "/shape/",
-            "desc": "机型(Shape)",
+            "desc": "机型",
             "prompt" : "list",
 			"subcommand" : [
 				{

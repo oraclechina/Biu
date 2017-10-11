@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +32,7 @@ import com.oracle.cloud.biu.api.NetworkAPI;
 import com.oracle.cloud.biu.api.StorageAPI;
 import com.oracle.cloud.biu.entity.AsciiTableEntity;
 import com.oracle.cloud.biu.entity.KV;
+import com.oracle.cloud.biu.entity.MyComparator;
 import com.thoughtworks.xstream.XStream;
 
 import de.codeshelf.consoleui.prompt.PromtResultItemIF;
@@ -243,7 +247,7 @@ public class BiuUtils extends EncryptUtil {
 		for (KV tkey : returnA) {
 			String inner = null;
 			data[i][0] = tkey.getKey();
-			data[i][1] = tkey.getValue();
+			data[i][1] = mask(tkey.getValue());
 			inner = exceptComputeAttr(obj, tkey, inner, tkey.getKey());
 
 			if (null != inner) {
@@ -256,9 +260,10 @@ public class BiuUtils extends EncryptUtil {
 		return en;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static String exceptComputeAttr(org.json.JSONObject obj, KV tkey, String inner, String except) {
 		if ("attributes".equals(except)) {
-			return "N/A";
+			return "...";
 		}
 		if ("networking".equals(except)) {
 			if (tkey.getKey().equals(except)) {
@@ -274,12 +279,12 @@ public class BiuUtils extends EncryptUtil {
 					int k = 0;
 					for (KV t3key : returnC) {
 						inner2Data[k][0] = t3key.getKey();
-						inner2Data[k][1] = t3key.getValue();
+						inner2Data[k][1] = mask(t3key.getValue());
 						k++;
 					}
 					innerData[j][0] = t2key.getKey();
 					inner2 = FlipTable.of(inner2Headers, inner2Data);
-					innerData[j][1] = inner2;
+					innerData[j][1] = mask(inner2);
 					j++;
 				}
 				inner = FlipTable.of(innerHeaders, innerData);
@@ -287,14 +292,33 @@ public class BiuUtils extends EncryptUtil {
 		}
 		if ("storage_attachments".equals(except)) {
 			if (tkey.getKey().equals(except)) {
-				List<KV> returnB = jsonaryToArray(obj.optJSONArray(except));
-				String[] innerHeaders = { "Key", "Value"};
-				String[][] innerData = new String[returnB.size()][2];
-				int j = 0;
-				for (KV t2key : returnB) {
-					innerData[j][0] = t2key.getKey();
-					innerData[j][1] = mask(t2key.getValue());
-					j++;
+				String[] innerHeaders = { "Volumn", "Index"};
+				String[][] innerData;
+				List<KV> tlist = new ArrayList<KV>();
+				Collection<KV> ckv = storageAttachmentRelationMap.values();
+				int p = 0;
+				if (null == storageAttachmentRelationMap) {
+					innerData = new String[0][2];
+				}
+				for (KV kv : ckv) {
+//					System.out.println("kv value:" + kv.getValue());
+//					System.out.println("mask name:" + mask(obj.optString("name")));
+					if(kv.getValue().indexOf(obj.optString("name")) > -1) {
+						p++;
+						tlist.add(kv);
+					}
+				}
+				Collections.sort(tlist, new MyComparator());
+				if (p == 0)
+					innerData = new String[0][2];
+				else {
+					innerData = new String[p][2];
+					int j = 0;
+					for (KV t2key : tlist) {
+						innerData[j][0] = mask(t2key.getReserve1());
+						innerData[j][1] = t2key.getReserve2();
+						j++;
+					}
 				}
 				inner = FlipTable.of(innerHeaders, innerData);
 			}
@@ -309,7 +333,7 @@ public class BiuUtils extends EncryptUtil {
 		int i = 0;
 		for (KV tkey : returnA) {
 			data[i][0] = tkey.getKey();
-			data[i][1] = tkey.getValue();
+			data[i][1] = mask(tkey.getValue());
 			i++;
 		}
 		en.setHeader(headers);
@@ -338,6 +362,7 @@ public class BiuUtils extends EncryptUtil {
 		else if ("com.oracle.cloud.biu.api.NetworkAPI-listIPN".equals(method))
 			en = goHasIPNetworkShowResult(jsonArray, en);
 		else if ("com.oracle.cloud.biu.api.ComputeAPI-listComputes".equals(method)) {
+			cacheStorageAttachementRelation(jsonArray);
 			cacheNetworkAttachementRelation(jsonArray);
 			en = goHasComputeInstancesShowResult(jsonArray, en);
 		} else
@@ -468,6 +493,8 @@ public class BiuUtils extends EncryptUtil {
 				KV kv = new KV();
 				kv.setKey(obj.optString("name"));
 				kv.setValue(obj.optString("instance_name"));
+				kv.setReserve1(obj.optString("storage_volume_name"));
+				kv.setReserve2(String.valueOf(obj.optInt("index")));
 				storageAttachmentRelationMap.put(mask(obj.optString("storage_volume_name")), kv);
 			}
 		} catch (Exception e) {
@@ -591,7 +618,7 @@ public class BiuUtils extends EncryptUtil {
 		int i = 0;
 		for (Object tempobj : jsonArray) {
 			org.json.JSONObject obj = (org.json.JSONObject) tempobj;
-			data[i][0] = obj.getString("name");
+			data[i][0] = mask(obj.getString("name"));
 			i++;
 		}
 		en.setHeader(headers);
@@ -684,9 +711,13 @@ public class BiuUtils extends EncryptUtil {
 
 	public static org.json.JSONObject getSucReturn(String string) {
 		org.json.JSONObject j = new org.json.JSONObject();
-		j.put("message", "操作成功");
+		j.put("message", "操作完毕，请再次检查");
 		return j;
 	}	
 	
-	
+	public static org.json.JSONObject getErrReturn(String string, String message) {
+		org.json.JSONObject j = new org.json.JSONObject();
+		j.put("message", "操作失败原因[" + string + "]：" + message);
+		return j;
+	}	
 }

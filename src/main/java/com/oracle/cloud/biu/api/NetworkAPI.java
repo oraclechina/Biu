@@ -29,7 +29,7 @@ public class NetworkAPI {
 	}
 	
 	public static JSONObject createSharedRandomIP(String path, String vcableid) throws Exception {
-		String jsonbody = "{\"parentpool\": \"ippool:/oracle/public/ippool\",  \"vcable\": \"" + vcableid + "\",  \"tags\": [\"" + BasicAuthenticationAPI.CLOUD_TENANT + "\"]}";
+		String jsonbody = "{\"parentpool\": \"ippool:/oracle/public/ippool\",  \"vcable\": \"" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + vcableid + "\",  \"tags\": [\"" + BasicAuthenticationAPI.CLOUD_TENANT + "\"]}";
 		JsonNode node = BiuUtils.rest("post", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
 		log.debug(node.getObject());
 		return node.getObject();
