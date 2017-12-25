@@ -43,7 +43,7 @@ public class NetworkAPI {
 	}
 	
 	public static JSONObject createIPN(String path, String name, String networkrange) throws Exception {
-		String jsonbody = "{ \"name\": \"/"+BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + name + "\", \"ipAddressPrefix\": \"" + networkrange + "\",  \"tags\": [\"" + BasicAuthenticationAPI.CLOUD_TENANT + "\"]}";
+		String jsonbody = "{ \"name\": \""+BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + name + "\", \"ipAddressPrefix\": \"" + networkrange + "\",  \"tags\": [\"" + BasicAuthenticationAPI.CLOUD_TENANT + "\"]}";
 		JsonNode node = BiuUtils.rest("post", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
 		log.debug(node.getObject());
 		return node.getObject();

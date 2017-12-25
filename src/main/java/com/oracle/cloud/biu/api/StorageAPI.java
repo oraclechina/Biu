@@ -77,7 +77,7 @@ public class StorageAPI {
 	}
 	
 	public static JSONObject createStorageAttachments(String path, String volname, String instanceName, String index) throws Exception {
-		String jsonbody = "{ \"index\": " + index + ", \"storage_volume_name\": \"" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + volname + "\", \"instance_name\": \"/" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + instanceName + "\"}";
+		String jsonbody = "{ \"index\": " + index + ", \"storage_volume_name\": \"" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + volname + "\", \"instance_name\": \"" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + instanceName + "\"}";
 		JsonNode node = BiuUtils.rest("post", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
 		log.debug(node.getObject());
 		return node.getObject();

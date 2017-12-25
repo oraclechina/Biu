@@ -647,6 +647,106 @@
 		            ]
 	            }	            
 	        ]        
+        },
+        {
+            "name": "biubiu",
+            "endpoint": "/biubiuapi/",
+            "desc": "BiuBiu",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "BiuBiuAPI-createOracleDatabaseAutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "自动创建并部署Oracle数据库12c",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_1_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_sshkeycontent",
+							"endpoint": "input",
+				            "desc": "如果系统没有sshkey需要创建时，需要传递的sshkey公钥内容",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_insname",
+							"endpoint": "input",
+				            "desc": "计算实例名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_shape",
+							"endpoint": "input",
+				            "desc": "计算实例型号",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_os",
+							"endpoint": "input",
+				            "desc": "实例操作系统",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_tenant",
+							"endpoint": "input",
+				            "desc": "租户名称",
+				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_1_pk",
+							"endpoint": "input",
+				            "desc": "sshkey私钥",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-createOracleDatabaseRACAutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "自动创建并部署Oracle数据库12c-RAC架构",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_1_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-createOracleWeblogicAutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "自动创建并部署Oracle Weblogic12c",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_1_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-createHadoopClusterAutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "自动创建并部署Hadoop2个节点集群",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_1_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }     
+	    	]
         }
     ]
 }

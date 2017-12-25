@@ -103,6 +103,8 @@ public class SecurityAPI {
 	
 	public static JSONObject createSSHKey(String path, String keyname, String keystring) throws Exception {
 		String jsonbody = "{ \"enabled\": true, \"key\": \"" + keystring + "\", \"name\": \"" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + keyname + "\"}";
+		log.debug("============================== json body ============================");
+		log.debug(jsonbody);
 		JsonNode node = BiuUtils.rest("post", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
 		log.debug(node.getObject());
 		return node.getObject();

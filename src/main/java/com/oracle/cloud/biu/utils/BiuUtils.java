@@ -56,7 +56,7 @@ public class BiuUtils extends EncryptUtil {
 				properties.putAll(propsMap);
 				String accountstr = FileUtils.readFileToString(new File(Biu.BIUPROFILE));
 				String source = BiuUtils.decrypted(accountstr);
-				Map<String, ? extends PromtResultItemIF> map1 = (Map<String, ? extends PromtResultItemIF>) JSON.parseObject(source);  
+				Map<String, ? extends PromtResultItemIF> map1 = (Map<String, ? extends PromtResultItemIF>) JSON.parseObject(source);
 				
 				propsMap.put("endpoint", ((JSONObject) map1.get("endpoint")).getString("input"));
 				propsMap.put("cloud_username", ((JSONObject) map1.get("clouduser")).getString("input"));
@@ -75,6 +75,11 @@ public class BiuUtils extends EncryptUtil {
 	public static String kv(String orgi, String key, String value) {
 		String sdstr = orgi.replaceAll("\\{" + key + "\\}", value);
 		sdstr = sdstr.replaceAll("//", "/");
+		return sdstr;
+	}
+	
+	public static String kvNULL(String orgi, String key) {
+		String sdstr = orgi.replaceAll(key, "");
 		return sdstr;
 	}
 	

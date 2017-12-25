@@ -144,7 +144,9 @@ public class Biu {
 	public static void initBiu(String accountstr) throws Exception {
 		AnsiConsole.systemInstall();
 		System.out.println(ansi().eraseScreen().render("@|green 你好，欢迎您使用Biu|@\n@|reset "
-				+ "在开始使用之前请您确认您已经得到了使用授权，并仔细阅读过使用文档\n" + "Biu的作者为Oracle公有云事业部 Zhqiaing.|@"));
+				+ "在开始使用之前请您确认您已经得到了使用授权，并仔细阅读过使用文档\n" + "Biu的作者为Oracle公有云事业部 Liu Zhiqiang.|@"));
+		System.out.println("  ___                 _        ____ ___ _   _\n / _ \\ _ __ __ _  ___| | ___  | __ )_ _| | | |\n| | | | '__/ _` |/ __| |/ _ \\ |  _ \\| || | | |\n| |_| | | | (_| | (__| |  __/ | |_) | || |_| |\n \\___/|_|  \\__,_|\\___|_|\\___| |____/___|\\___/");
+		System.out.println(" _     _         ______     _       _\n| |   (_)_   _  |__  / |__ (_) __ _(_) __ _ _ __   __ _\n| |   | | | | |   / /| '_ \\| |/ _` | |/ _` | '_ \\ / _` |\n| |___| | |_| |  / /_| | | | | (_| | | (_| | | | | (_| |\n|_____|_|\\__,_| /____|_| |_|_|\\__, |_|\\__,_|_| |_|\\__, |\n                                 |_|              |___/");
 		if (StringUtils.isEmpty(accountstr)) {
 			try {
 				HashMap<String, ? extends PromtResultItemIF> result = initPrompt();
@@ -246,7 +248,7 @@ public class Biu {
 			System.exit(0);
 		} else {
 			if ((t1.getString("prompt").equals("input"))) {
-				//TODO 处理三层结构下的菜单交互性
+				//TODO Will process the tier 3 menu arch.
 //				if (t1.toJSONString().indexOf("subcommand") > 1) {
 //					showInteractiveMenu(t1, t1);
 //					return;

@@ -43,8 +43,10 @@ public class ComputeAPI {
 	}
 	
 	public static JSONObject createComputeInstance(String path, String label, String shape, String imagelist, String keyname) throws Exception {
-		String name = "/" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + label;
-		String jsonbody = ComputeEntity.build(label, name, shape, "/" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + keyname, imagelist);
+		String name = BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + label;
+		String jsonbody = ComputeEntity.build(label, name, shape, BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + keyname, imagelist);
+		log.debug("================== request body ======================");
+		log.debug(jsonbody);
 		JsonNode node = BiuUtils.rest("post", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
 		log.debug(node.getObject());
 		return node.getObject();
