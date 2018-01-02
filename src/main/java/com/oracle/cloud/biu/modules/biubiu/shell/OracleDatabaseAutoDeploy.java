@@ -47,7 +47,9 @@ public class OracleDatabaseAutoDeploy extends BaseModule {
 	 * 3 = 实例名
 	 * 4 = shape
 	 * 5 = 操作系统定义串
-	 * 6 = 租户名
+	 * 6 = 数据库版本
+	 * 7 = 租户名
+	 * 8 = 私钥内容
 	 */
 	@SuppressWarnings("finally")
 	@Override
@@ -60,8 +62,9 @@ public class OracleDatabaseAutoDeploy extends BaseModule {
 		String insname          = params[2];
 		String shape			= params[3];
 		String os				= params[4];
-		String tenant			= params[5];
-		String pk				= params[6];
+		String version			= params[5];
+		String tenant			= params[6];
+		String pk				= params[7];
 		
 		//将程序是否可以继续执行做一个标记，标记为false的不允许继续执行
 		OracleDatabaseAutoDeployRespEntity resp = new OracleDatabaseAutoDeployRespEntity();
@@ -312,11 +315,11 @@ public class OracleDatabaseAutoDeploy extends BaseModule {
 				log.debug("[Process] ========================================");
 				log.debug("[Process] Public IP	：" + publicip);
 				log.debug("[Process] Port		：" + "1521");
-				log.debug("[Process] SID		：" + "orcl12c");
+				log.debug("[Process] SID		：" + "orcl11g");
 				log.debug("[Process] Username	：" + "system");
 				log.debug("[Process] Password	：" + "passW0RD");
 				log.debug("[Process] ========================================");
-				boolean _isdbok = OracleJDBCTools.checkConnection(publicip, "1521", "orcl12c", "system", "passW0RD");
+				boolean _isdbok = OracleJDBCTools.checkConnection(publicip, "1521", "orcl11g", "system", "passW0RD");
 				if (!_isdbok) {
 					passable = false;
 				} else {
@@ -347,10 +350,11 @@ public class OracleDatabaseAutoDeploy extends BaseModule {
 		Shell shell = new Ssh(publicip, 22, "opc", privatekey);
 		Plain ap = new Shell.Plain(shell);
 		ap.exec("sudo -s");
-		ap.exec("curl -O https://em2.storage.oraclecloud.com/v1/Storage-gse00002004/shared/scripts/DB12cR1/vm_init_db12cR1_BiuBiu.sh");
-		ap.exec("chmod +x ./vm_init_db12cR1_BiuBiu.sh");
-//		int exitValue = shell.exec("sudo sh /home/opc/vm_init_db12cR1_BiuBiu.sh", System.in, System.out, System.err);
-		String exitValue = ap.exec("sudo sh /home/opc/vm_init_db12cR1_BiuBiu.sh");
+//		ap.exec("curl -O https://em2.storage.oraclecloud.com/v1/Storage-gse00002004/shared/scripts/DB12cR1/vm_init_db12cR1_BiuBiu.sh");
+		ap.exec("curl -O https://em2.storage.oraclecloud.com/v1/Storage-gse00002004/shared/scripts/DB11gR2/vm_init_db11gR2_BiuBiu.sh");
+		ap.exec("chmod +x ./vm_init_db11gR2_BiuBiu.sh");
+//		int exitValue = shell.exec("sudo sh /home/opc/vm_init_db11gR2_BiuBiu.sh", System.in, System.out, System.err);
+		String exitValue = ap.exec("sudo sh /home/opc/vm_init_db11gR2_BiuBiu.sh");
 		if (exitValue.indexOf("Deploying Oracle...done.") > 0)
 			return true;
 		return false;

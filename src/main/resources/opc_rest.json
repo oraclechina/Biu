@@ -655,9 +655,59 @@
             "prompt" : "list",
 			"subcommand" : [
 				{
-					"name": "BiuBiuAPI-createOracleDatabaseAutoDeploy",
+					"name": "BiuBiuAPI-createOracleDatabase11gR2AutoDeploy",
 					"endpoint": "/biubiu/",
-		            "desc": "自动创建并部署Oracle数据库12c",
+		            "desc": "自动创建并部署Oracle数据库11gR2",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_2_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_sshkeycontent",
+							"endpoint": "input",
+				            "desc": "如果系统没有sshkey需要创建时，需要传递的sshkey公钥内容",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_insname",
+							"endpoint": "input",
+				            "desc": "计算实例名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_shape",
+							"endpoint": "input",
+				            "desc": "计算实例型号",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_os",
+							"endpoint": "input",
+				            "desc": "实例操作系统",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_tenant",
+							"endpoint": "input",
+				            "desc": "租户名称",
+				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_2_pk",
+							"endpoint": "input",
+				            "desc": "sshkey私钥",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-createOracleDatabase12cR1AutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "自动创建并部署Oracle数据库12cR1",
 		            "prompt" : "input",
 		            "subcommand" : [
 		            	{
@@ -703,7 +753,7 @@
 				            "prompt" : "input"
 		            	}
 		            ]
-	            },
+	            },	            
 				{
 					"name": "BiuBiuAPI-createOracleDatabaseRACAutoDeploy",
 					"endpoint": "/biubiu/",
