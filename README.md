@@ -18,5 +18,5 @@ The default language is english, if you want to use Chinese, please change the v
 Example<br />
 java -jar target/Biu-jar-with-dependencies.jar _en
 
-Biu Console Menu Screenshot
+# Biu Console Menu Screenshot
 ![image](https://github.com/oraclechina/Biu/blob/master/images/biu_logo.png)
