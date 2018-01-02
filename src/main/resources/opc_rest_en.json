@@ -1,0 +1,802 @@
+{
+	"name": "root",
+	"endpoint": "",
+	"desc": "root",
+	"prompt" : "list",
+    "subcommand": [
+        {
+            "name": "login",
+            "endpoint": "/authenticate/",
+            "desc": "Login",
+            "prompt" : "none"
+        },
+        {
+            "name": "sshkeys",
+            "endpoint": "/sshkey/{container}/",
+            "desc": "SSH Keys",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "SecurityAPI-listSSHKeys",
+					"endpoint": "/sshkey/{container}/",
+		            "desc": "List SSH Keys",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showsshkeys",
+							"endpoint": "show",
+				            "desc": "Your SSH Keys",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-createSSHKeyForUI",
+					"endpoint": "/sshkey/",
+		            "desc": "Upload SSH Keys",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtsshkeyname",
+							"endpoint": "input",
+				            "desc": "Please Input Key Name",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtsshkeypath",
+							"endpoint": "input",
+				            "desc": "Please Input File Location Or Http URL",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-deleteSSHKey",
+					"endpoint": "/sshkey/{name}",
+		            "desc": "Delete SSH Key",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmsshkeyname",
+							"endpoint": "input",
+				            "desc": "Please Input Delete SSH Key Name",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }
+	    	]
+        },
+        {
+            "name": "security",
+            "endpoint": "/seclist/{container}/",
+            "desc": "Security Group",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "SecurityAPI-listSecList",
+					"endpoint": "/seclist/{container}/",
+		            "desc": "List Security Group",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showseclists",
+							"endpoint": "show",
+				            "desc": "List All of You Security Group",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-createSecList",
+					"endpoint": "/seclist/",
+		            "desc": "Create Security Group",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtseclistname",
+							"endpoint": "input",
+				            "desc": "Please Input The Security Group Name",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtseclistoutbound",
+							"endpoint": "input",
+				            "desc": "Please Input Security OutBound Type,deny/reject/permit",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtseclistinbound",
+							"endpoint": "input",
+				            "desc": "Please Input Security InBound Type,deny/reject/permit",
+				            "prompt" : "input"
+		            	}		            			            	
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-deleteSecList",
+					"endpoint": "/seclist/{name}",
+		            "desc": "Delete Security Group",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmseclistname",
+							"endpoint": "input",
+				            "desc": "Please Input Delete Security Group Name",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-createSecAssociation",
+					"endpoint": "/secassociation/",
+		            "desc": "Bind Security Group To Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtsecassvcableid",
+							"endpoint": "input",
+				            "desc": "Please Input the Instance vcable_id, You Can Get The Value From View Instance Detail",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtsecassname",
+							"endpoint": "input",
+				            "desc": "Please Input Bind Security Name",
+				            "prompt" : "input"
+		            	}		            			            	
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-deleteSecAssociation",
+					"endpoint": "/secassociation/{name}",
+		            "desc": "UnBind Security Group From Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmsecassname",
+							"endpoint": "input",
+				            "desc": "Please Input the Instance vcable_id, You Can Get The Value From View Instance Detail",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "rmsecassinsname",
+							"endpoint": "input",
+				            "desc": "Please Input UnBind Security Group Name",
+				            "prompt" : "input"
+		            	}		            			            	
+		            ]
+	            },
+				{
+					"name": "SecurityAPI-listSecRule",
+					"endpoint": "/secrule/{container}/",
+		            "desc": "List Security Rule",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showsecrule",
+							"endpoint": "show",
+				            "desc": "List All Of You Security Rule",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },	 
+	            {
+					"name": "SecurityAPI-createSecRule",
+					"endpoint": "/secrule/",
+		            "desc": "Create Security Rule",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtsecrulename",
+							"endpoint": "input",
+				            "desc": "Please Input Security Rule Name",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtsecruleto",
+							"endpoint": "input",
+				            "desc": "Please Input Security Group Name",
+				            "prompt" : "input"
+		            	}		            			            	
+		            ]
+	            },
+	            {
+					"name": "SecurityAPI-deleteSecRule",
+					"endpoint": "/secrule/{name}",
+		            "desc": "Delete Security Rule",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmseclistname",
+							"endpoint": "input",
+				            "desc": "Please Input Delete Security Rule Name",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }	                      
+	    	]
+        },
+        {
+            "name": "shapes",
+            "endpoint": "/shape/",
+            "desc": "Shapes",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "CommonAPI-listShape",
+					"endpoint": "/shape/",
+		            "desc": "List The Public Shape",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showshapes",
+							"endpoint": "show",
+				            "desc": "All Available Shape",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            }
+	    	]
+        },
+        {
+            "name": "oscontainers",
+            "endpoint": "/machineimage/",
+            "desc": "OS",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "CommonAPI-listOSImages",
+					"endpoint": "/machineimage/{container}/",
+		            "desc": "List All OS Image",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showosimages",
+							"endpoint": "show",
+				            "desc": "List All OS Image",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },			
+				{
+					"name": "CommonAPI-listMyOSImages",
+					"endpoint": "/machineimage/{container}/",
+		            "desc": "List My OS Image",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showmyosimages",
+							"endpoint": "show",
+				            "desc": "List My OS Image",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            }
+	    	]
+        },
+        {
+            "name": "computeinstances",
+            "endpoint": "/instance/{container}",
+            "desc": "Compute Instance",
+            "prompt" : "list",
+            "subcommand" : [
+				{
+					"name": "ComputeAPI-listComputes",
+					"endpoint": "/instance/{container}",
+		            "desc": "List Compute Instance",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showcomputeinss",
+							"endpoint": "show",
+				            "desc": "Current All Created Compute Instances",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-viewComputes",
+					"endpoint": "/instance/{name}",
+		            "desc": "View Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "viewcomputeins",
+							"endpoint": "input",
+				            "desc": "Please Input Compute Instance Name",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-createComputeInstance",
+					"endpoint": "/launchplan/",
+		            "desc": "Create Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtcomputeinsname",
+							"endpoint": "input",
+				            "desc": "Please Input Compute Instance Name",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "crtcomputeinsshape",
+							"endpoint": "input",
+				            "desc": "Please Input Compute Instance Shape",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "crtcomputeinsos",
+							"endpoint": "input",
+				            "desc": "Please Input Compute Instance OS",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "crtcomputeinssshpk",
+							"endpoint": "input",
+				            "desc": "Please Input SSH Key Name",
+				            "prompt" : "input"
+		            	}		            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-deleteComputeInstance",
+					"endpoint": "/instance/{name}",
+		            "desc": "Delete Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmcomputeinsname",
+							"endpoint": "input",
+				            "desc": "Please Input Delete Compute Instance Name",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
+	            }	                        
+	    	]
+        },
+        {
+            "name": "StorageAPI",
+            "endpoint": "/storage/volume/{container}/",
+            "desc": "Storage",
+            "prompt" : "list",
+            "subcommand" : [
+				{
+					"name": "StorageAPI-listStorageVolumns",
+					"endpoint": "/storage/volume/{container}/",
+		            "desc": "List Storage Volumns",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showstoragevolumns",
+							"endpoint": "show",
+				            "desc": "Current All Created Storage Volumns",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-viewStorageVolumns",
+					"endpoint": "/storage/volume/{name}",
+		            "desc": "View Storage Volumn",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "viewstoragename",
+							"endpoint": "input",
+				            "desc": "Please Input Storage Volumn Name",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-createStorageBootVolumns",
+					"endpoint": "/storage/volume/",
+		            "desc": "Create Boot Volumn",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "storagebootsize",
+							"endpoint": "input",
+				            "desc": "Please Input Boot Volumn Size(Unit G)",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-createStorageBlankVolumns",
+					"endpoint": "/storage/volume/",
+		            "desc": "Create Blank Volumn",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "storageblanksize",
+							"endpoint": "input",
+				            "desc": "Please Input Blank Volumn Size(Unit G)",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-createStorageAttachments",
+					"endpoint": "/storage/attachment/",
+		            "desc": "Bind Storage Volumn To Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "crtstorageattname",
+							"endpoint": "input",
+				            "desc": "Please Input Storage Volumn Name",
+				            "prompt" : "input"
+		            	},
+		            	{
+				        	"name": "tocrtattachinsname",
+							"endpoint": "input",
+						    "desc": "Please Input Compute Instance Name",
+						    "prompt" : "input"
+				        },
+		            	{
+				        	"name": "tocrtattachinsnameidx",
+							"endpoint": "input",
+						    "desc": "Please Input Bind Position Index(Number 1-9)",
+						    "prompt" : "input"
+				        }
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-deleteStorageVolumns",
+					"endpoint": "/storage/volume/{name}",
+		            "desc": "Delete Storage Volumn",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "deletestoragevolname",
+							"endpoint": "input",
+				            "desc": "Please Input Storage Volumn Name",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-deleteStorageAttachment",
+					"endpoint": "/storage/attachment/{name}",
+		            "desc": "Unbind Storage Volumn From Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "deletestorageattachname",
+							"endpoint": "input",
+				            "desc": "Please Input Unbind Attachment Name, Can Get The Value From View Storage Volumn",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }
+            ]
+        },
+        {
+            "name": "listnetworks",
+            "endpoint": "/network/v1/ipnetwork/{container}/",
+            "desc": "Network",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "NetworkAPI-createSharedRandomIP",
+					"endpoint": "/ip/association/",
+		            "desc": "Classic Network-Bind Compute Instance To A Random Reservation IP",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "sn_crtrandomip",
+							"endpoint": "input",
+				            "desc": "Please Input Compute Instance vcable_id, Can Get The Value From View Compute Instance",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "NetworkAPI-deleteSharedRandomIP",
+					"endpoint": "/ip/association/{name}",
+		            "desc": "Classic Network-Unbind IP To Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "sn_rmrandomip",
+							"endpoint": "input",
+				            "desc": "Please Input Public IP Association, Can Get The Value From View Compute Instance",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	            	
+				{
+					"name": "NetworkAPI-listSharedFixIPs",
+					"endpoint": "/ip/reservation/{container}/",
+		            "desc": "Classic Network-List IP Reservation",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "sn_showfixedip",
+							"endpoint": "show",
+				            "desc": "List All IP Reservation",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+				{
+					"name": "NetworkAPI-createSharedFixIP",
+					"endpoint": "/ip/reservation/",
+		            "desc": "Classic Network-Create IP Reservation",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "sn_crtfixedip",
+							"endpoint": "input",
+				            "desc": "Please Input IP Reservation Name(Classic Network)",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "sn_crtfixediptype",
+							"endpoint": "input",
+				            "desc": "Is This A Fixed IP? Default Is true, If Not Input false",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	
+				{
+					"name": "NetworkAPI-deleteSharedFixIP",
+					"endpoint": "/ip/reservation/{name}",
+		            "desc": "Classic Network-Delete IP Reservation",
+		            "prompt" : "input",
+		            "subcommand" : [
+	            		{
+		            		"name": "sn_rmfixedip",
+							"endpoint": "input",
+				            "desc": "Please Input Delete IP Reservation Name(Classic Network)",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	                        
+				{
+					"name": "NetworkAPI-listIPNFixIPs",
+					"endpoint": "/network/v1/ipreservation/{container}/",
+		            "desc": "IP Network-List IP Reservation",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "ipn_showfixedip",
+							"endpoint": "show",
+				            "desc": "List All IP Reservation",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },
+				{
+					"name": "NetworkAPI-createIPNFixIP",
+					"endpoint": "/network/v1/ipreservation/",
+		            "desc": "IP Network-Create A IP Reservation",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "ipn_crtfixedip",
+							"endpoint": "input",
+				            "desc": "Please Input IP Reservation Name(IP Network)",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	
+				{
+					"name": "NetworkAPI-deleteIPNFixIP",
+					"endpoint": "/network/v1/ipreservation/{name}",
+		            "desc": "IP Network-Delete IP Reservation",
+		            "prompt" : "input",
+		            "subcommand" : [
+	            		{
+		            		"name": "ipn_rmfixedip",
+							"endpoint": "input",
+				            "desc": "Please Input Delete IP Reservation Name(IP Network)",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "NetworkAPI-listIPN",
+					"endpoint": "/network/v1/ipnetwork/{container}/",
+		            "desc": "IP Network-List IP Network",
+		            "prompt" : "show",
+		            "subcommand" : [
+	            		{
+		            		"name": "ipn_showipn",
+							"endpoint": "show",
+				            "desc": "Current All Created IP Network",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },	            
+				{
+					"name": "NetworkAPI-createIPN",
+					"endpoint": "/network/v1/ipnetwork/",
+		            "desc": "IP Network-Create IP Network",
+		            "prompt" : "input",
+		            "subcommand" : [
+	            		{
+		            		"name": "ipn_crtipn",
+							"endpoint": "input",
+				            "desc": "Please Input IP Network Name",
+				            "prompt" : "input"
+		            	},
+	            		{
+		            		"name": "ipn_crtipnrange",
+							"endpoint": "input",
+				            "desc": "Please Input Network Range BY CIDR(IPv4)",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },           
+				{
+					"name": "NetworkAPI-deleteIPN",
+					"endpoint": "/network/v1/ipnetwork/{name}",
+		            "desc": "IP Network-Delete IP Network",
+		            "prompt" : "input",
+		            "subcommand" : [
+	            		{
+		            		"name": "ipn_rmipn",
+							"endpoint": "input",
+				            "desc": "Please Input Delete IP Network Name",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }	            
+	        ]        
+        },
+        {
+            "name": "biubiu",
+            "endpoint": "/biubiuapi/",
+            "desc": "BiuBiu",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "BiuBiuAPI-createOracleDatabase11gR2AutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "ONE Click Create A VM And Deploy Oracle Database 11gR2",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_2_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_sshkeycontent",
+							"endpoint": "input",
+				            "desc": "如果系统没有sshkey需要创建时，需要传递的sshkey公钥内容",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_insname",
+							"endpoint": "input",
+				            "desc": "计算实例名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_shape",
+							"endpoint": "input",
+				            "desc": "计算实例型号",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_os",
+							"endpoint": "input",
+				            "desc": "实例操作系统",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_2_tenant",
+							"endpoint": "input",
+				            "desc": "租户名称",
+				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_2_pk",
+							"endpoint": "input",
+				            "desc": "sshkey私钥",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-createOracleDatabase12cR1AutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "ONE Click Create A VM And Deploy Oracle Database 12cR1",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_1_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_sshkeycontent",
+							"endpoint": "input",
+				            "desc": "如果系统没有sshkey需要创建时，需要传递的sshkey公钥内容",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_insname",
+							"endpoint": "input",
+				            "desc": "计算实例名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_shape",
+							"endpoint": "input",
+				            "desc": "计算实例型号",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_os",
+							"endpoint": "input",
+				            "desc": "实例操作系统",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_1_tenant",
+							"endpoint": "input",
+				            "desc": "租户名称",
+				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_1_pk",
+							"endpoint": "input",
+				            "desc": "sshkey私钥",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },	            
+				{
+					"name": "BiuBiuAPI-createOracleDatabaseRACAutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "自动创建并部署Oracle数据库12c-RAC架构",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_1_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-createOracleWeblogicAutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "自动创建并部署Oracle Weblogic12c",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_1_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-createHadoopClusterAutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "自动创建并部署Hadoop2个节点集群",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_1_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }     
+	    	]
+        }
+    ]
+}
