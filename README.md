@@ -1,11 +1,11 @@
 # Biu
 
-# Ê¹ÓÃÖ®Ç°±ØĞëÔÄ¶ÁÊ¹ÓÃĞí¿É»òÕßµÃµ½ÁøÖ¾Ç¿±¾ÈËµÄÍ¬Òâ
+# ä½¿ç”¨ä¹‹å‰å¿…é¡»é˜…è¯»ä½¿ç”¨è®¸å¯æˆ–è€…å¾—åˆ°æŸ³å¿—å¼ºæœ¬äººçš„åŒæ„
 # Init Infomation Example
-** Endpoint:https://compute.uscom-central-1.oraclecloud.com **
-** Username:cloud.admin **
-** Password:Jerky@0People **
-** Domain:gse00012384 **
+#Endpoint:https://compute.uscom-central-1.oraclecloud.com
+#Username:cloud.admin
+#Password:Jerky@*****
+#Domain:gse00012384
 
-# ĞèÊÖ¶¯½«oracleÇı¶¯×¢²áµ½maven¿âÖĞ
+# éœ€æ‰‹åŠ¨å°†oracleé©±åŠ¨æ³¨å†Œåˆ°mavenåº“ä¸­
 mvn install:install-file -Dfile=D:/download/ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=12.1.0 -Dpackaging=jar
