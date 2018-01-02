@@ -1,9 +1,8 @@
 # Biu
 
-# A fully opensource code framework for Oracle Public Cloud and Oracle At Customer
-# Biu has been realized fully Rest API for Oracle Public Cloud and Oracle At Customer
-
-# Biu have a console UI for customer can easy use Oracle Public Cloud and Oracle At Customer
+#A fully opensource code framework for Oracle Public Cloud and Oracle At Customer
+Biu has been realized fully Rest API for Oracle Public Cloud and Oracle At Customer
+Biu have a console UI for customer can easy use Oracle Public Cloud and Oracle At Customer
 
 # Init Infomation Example
 #Endpoint:https://compute.uscom-central-1.oraclecloud.com<br />
