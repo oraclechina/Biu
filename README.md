@@ -12,3 +12,8 @@ Biu have a console UI for customer can easy use Oracle Public Cloud and Oracle A
 
 # You need add Oracle JDBC Driver into maven repository by your self
 mvn install:install-file -Dfile=D:/download/ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=12.1.0 -Dpackaging=jar
+
+# Language
+The default language is english, if you want to use Chinese, please change the value _en to _cn in Biu.bat<br />
+Example<br />
+java -jar target/Biu-jar-with-dependencies.jar _en
