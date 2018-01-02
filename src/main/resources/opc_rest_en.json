@@ -241,7 +241,7 @@
         {
             "name": "oscontainers",
             "endpoint": "/machineimage/",
-            "desc": "OS",
+            "desc": "Operation System",
             "prompt" : "list",
 			"subcommand" : [
 				{

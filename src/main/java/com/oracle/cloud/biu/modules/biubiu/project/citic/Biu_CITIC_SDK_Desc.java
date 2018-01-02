@@ -16,6 +16,7 @@ public class Biu_CITIC_SDK_Desc {
 	private String xtype = "biuCreateAndDeployOracleDatabaseOnOCC";
 	//事务消息，当非查询申请的返回值为ok则为成功操作，否则为任何可能的报错信息
 	private String xmessage = "ok";
+	private String xlog = "";
 	//事务返回状态
 	private String xstatus = "申请中";
 	//事务接受时间
@@ -49,7 +50,7 @@ public class Biu_CITIC_SDK_Desc {
 	//Oracle 数据库 home目录
 	private String oracledbhome = "/u01/app/oracle/product/11.2.0/dbhome_1";
 	//Oracle 数据库 SID
-	private String oracledbsid = "orcl11g";	
+	private String oracledbsid = "orcl11g";
 	//Oracle 数据库 服务监听端口
 	private String oracledblisport = "1521";
 	//Oracle 数据库 库字符集

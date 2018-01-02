@@ -40,6 +40,7 @@ public class Biu {
 	public static JSONObject MENU = null;
 	public static Map<String, JSONObject> MENUMAP;
 	public static Map<String, JSONObject> MENURELATIONMAP;
+	public static String language = "_en";
 
 	public static void main(String[] args) {
 		try {
@@ -47,6 +48,9 @@ public class Biu {
 			if (!file.exists()) {
 				log.warn("biuaccount not exists");
 				FileUtils.writeStringToFile(file, "");
+			}
+			if ((null != args) && (args.length > 0)) {
+				language = args[0];
 			}
 			String accountstr = FileUtils.readFileToString(new File(BIUPROFILE));
 			initBiu(accountstr);
@@ -143,8 +147,8 @@ public class Biu {
 
 	public static void initBiu(String accountstr) throws Exception {
 		AnsiConsole.systemInstall();
-		System.out.println(ansi().eraseScreen().render("@|green 你好，欢迎您使用Biu|@\n@|reset "
-				+ "在开始使用之前请您确认您已经得到了使用授权，并仔细阅读过使用文档\n" + "Biu的作者为Oracle公有云事业部 Liu Zhiqiang.|@"));
+		System.out.println(ansi().eraseScreen().render("@|green Hi, Welcome to Choose Biu|@\n@|reset "
+				+ "Biu is a opensource framework for Oracle Public Cloud and Oracle Cloud At Customer base on GPL-3.0 license\n" + "Biu Author Is China Cloud Team zhiqiang.x.liu@oracle.com.|@"));
 		System.out.println("  ___                 _        ____ ___ _   _\n / _ \\ _ __ __ _  ___| | ___  | __ )_ _| | | |\n| | | | '__/ _` |/ __| |/ _ \\ |  _ \\| || | | |\n| |_| | | | (_| | (__| |  __/ | |_) | || |_| |\n \\___/|_|  \\__,_|\\___|_|\\___| |____/___|\\___/");
 		System.out.println(" _     _         ______     _       _\n| |   (_)_   _  |__  / |__ (_) __ _(_) __ _ _ __   __ _\n| |   | | | | |   / /| '_ \\| |/ _` | |/ _` | '_ \\ / _` |\n| |___| | |_| |  / /_| | | | | (_| | | (_| | | | | (_| |\n|_____|_|\\__,_| /____|_| |_|_|\\__, |_|\\__,_|_| |_|\\__, |\n                                 |_|              |___/");
 		if (StringUtils.isEmpty(accountstr)) {
@@ -157,9 +161,9 @@ public class Biu {
 				if (delivery.getConfirmed() == ConfirmChoice.ConfirmationValue.YES) {
 					String out1 = BiuUtils.encrypted(json);
 					FileUtils.writeStringToFile(new File(BIUPROFILE), out1);
-					System.out.println("您的初始化信息已经保存至当前目录下的.biuaccount文件中，您可以开始使用Biu了");
+					System.out.println("Your init information has been saved in current folder .biuaccount file, now you can use Biu now.");
 				} else {
-					System.out.println("您选择了否，所以配置信息没有写入");
+					System.out.println("You choose false, so the init information have not save.");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -205,11 +209,11 @@ public class Biu {
 		ConsolePrompt prompt = new ConsolePrompt();
 		PromptBuilder promptBuilder = prompt.getPromptBuilder();
 		if ((!StringUtils.isEmpty(t1.getString("prompt"))) && (t1.getString("prompt").equals("list"))) {
-			ListPromptBuilder lpb = promptBuilder.createListPrompt().name("rootcmd").message("你想要做有关什么的操作?");
+			ListPromptBuilder lpb = promptBuilder.createListPrompt().name("rootcmd").message("What Do You Want To Do?");
 			if (StringUtils.isEmpty(t1.getString("endpoint")))
-				lpb.newItem("exit").text("退出").add();
+				lpb.newItem("exit").text("Exit").add();
 			else
-				lpb.newItem("back").text("返回上一级").add();
+				lpb.newItem("back").text("Return Back").add();
 			for (int i = 0; i < ary.size(); i++) {
 				JSONObject obj2 = ary.getJSONObject(i);
 				if (!obj2.getString("prompt").equals("none")) {
@@ -220,7 +224,7 @@ public class Biu {
 			lpb.addPrompt();
 			
 		} else if ((!StringUtils.isEmpty(t1.getString("prompt"))) && (t1.getString("prompt").equals("input"))) {
-			InputValueBuilder lpb = promptBuilder.createInputPrompt().name("rootcmd").message("你想要做有关什么的操作?");
+			InputValueBuilder lpb = promptBuilder.createInputPrompt().name("rootcmd").message("What Do You Want To Do?");
 			for (int i = 0; i < ary.size(); i++) {
 				JSONObject obj2 = ary.getJSONObject(i);
 				log.debug("added " + obj2.getString("desc"));
@@ -229,7 +233,7 @@ public class Biu {
 			}
 			
 		} else if ((!StringUtils.isEmpty(t1.getString("prompt"))) && (t1.getString("prompt").equals("view"))) {
-			InputValueBuilder lpb = promptBuilder.createInputPrompt().name("rootcmd").message("你想要做有关什么的操作?");
+			InputValueBuilder lpb = promptBuilder.createInputPrompt().name("rootcmd").message("What Do You Want To Do?");
 			for (int i = 0; i < ary.size(); i++) {
 				JSONObject obj2 = ary.getJSONObject(i);
 				log.debug("added " + obj2.getString("desc"));
@@ -290,28 +294,32 @@ public class Biu {
 		ConsolePrompt prompt = new ConsolePrompt();
 		PromptBuilder promptBuilder = prompt.getPromptBuilder();
 
-		promptBuilder.createInputPrompt().name("endpoint").message("请输入您的Endpoint，如果不知道请咨询Oracle售前").defaultValue("")
+		promptBuilder.createInputPrompt().name("endpoint").message("Please Input Your Oracle Cloud Endpoint, If You Do Not Know Please Contact To Oracle Sales Consultant").defaultValue("")
 				// .mask('*')
 				.addPrompt();
 
-		promptBuilder.createInputPrompt().name("clouddomain").message("请输入您的云账户domain，如果不知道请咨询Oracle售前")
+		promptBuilder.createInputPrompt().name("clouddomain").message("Please Input Your Cloud Domain, If You Do Not Know Please Contact To Oracle Sales Consultant")
 				.defaultValue("")
 				// .mask('*')
 				.addPrompt();
 
-		promptBuilder.createInputPrompt().name("clouduser").message("请输入您的云账户用户名").defaultValue("")
+		promptBuilder.createInputPrompt().name("clouduser").message("Please Input Your Cloud Account Username").defaultValue("")
 				// .mask('*')
 				.addPrompt();
 
-		promptBuilder.createInputPrompt().name("cloudpassword").message("请输入您的云账户密码").defaultValue("")
+		promptBuilder.createInputPrompt().name("cloudpassword").message("Please Input Your Cloud Account Password").defaultValue("")
 				 .mask('*')
 				.addPrompt();
 
-		promptBuilder.createInputPrompt().name("cloudtenant").message("请输入您的租户名").defaultValue("")
+		promptBuilder.createInputPrompt().name("cloudtenant").message("Please Input Your Cloud Account Tenant Username").defaultValue("")
 				// .mask('*')
 				.addPrompt();
+		
+		promptBuilder.createInputPrompt().name("language").message("Please Input Language Name For Biu Menu").defaultValue("")
+		// .mask('*')
+		.addPrompt();		
 
-		promptBuilder.createConfirmPromp().name("delivery").message("您输入的信息都正确吗？")
+		promptBuilder.createConfirmPromp().name("delivery").message("The Below Information You Have Provided Is Correct?")
 				.defaultValue(ConfirmChoice.ConfirmationValue.YES).addPrompt();
 
 		HashMap<String, ? extends PromtResultItemIF> result = prompt.prompt(promptBuilder.build());
@@ -337,7 +345,7 @@ public class Biu {
 //	}
 	
 	public static void loadPrompt() throws Exception {
-		String menu = BiuUtils.ConvertStream2Json(BiuUtils.class.getClassLoader().getResourceAsStream("opc_rest.json"));
+		String menu = BiuUtils.ConvertStream2Json(BiuUtils.class.getClassLoader().getResourceAsStream("opc_rest" + language + ".json"));
 		MENU = (JSONObject) JSON.parse(menu);
 		MENUMAP = new HashMap<String, JSONObject>();
 		MENURELATIONMAP = new HashMap<String, JSONObject>();
