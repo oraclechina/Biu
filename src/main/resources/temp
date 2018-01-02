@@ -1,6 +1,0 @@
-##################Login################
-endpoint=https://api-z12.compute.em2.oraclecloud.com
-cloud_domain=gse00000578
-cloud_username=cloud.admin
-cloud_password=galactiC@0LeON
-cloud_sshkeyname=zhiqiang_key
