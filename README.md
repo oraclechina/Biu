@@ -20,3 +20,6 @@ java -jar target/Biu-jar-with-dependencies.jar _en
 
 # Biu Console Menu Screenshot
 ![image](https://github.com/oraclechina/Biu/blob/master/images/biu_logo.png)
+
+# Biu Plugin-ORC Live Demo Show
+![image](https://github.com/oraclechina/Biu/blob/master/images/Biu演示2.gif)
