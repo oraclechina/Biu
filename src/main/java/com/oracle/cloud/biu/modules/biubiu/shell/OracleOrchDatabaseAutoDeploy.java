@@ -657,7 +657,7 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 	}
 
 	@Override
-	public void nuke(String orchid) {
+	protected void nuke(String orchid) {
 		//execute nuke
 	}
 
