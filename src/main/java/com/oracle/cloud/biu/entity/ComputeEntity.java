@@ -16,7 +16,7 @@ public class ComputeEntity {
 	private List<ComputeInstanceEntity> instances = new ArrayList<>();
 	private List<String> tags = new ArrayList<>();
 	
-	public static String build(String label, String name, String shape, String sshkeys, String imagelist) {
+	public static String build(String label, String name, String shape, String sshkeys, String imagelist, String tags) {
 		ComputeEntity ce = new ComputeEntity();
 		ComputeInstanceEntity cie = new ComputeInstanceEntity();
 		cie.setLabel(label);
@@ -24,11 +24,12 @@ public class ComputeEntity {
 		cie.setShape(shape);
 		cie.setImagelist(imagelist);
 		cie.sshkeys.add(sshkeys);
+		cie.tags.add(tags);
 		ce.instances.add(cie);
-		ce.tags.add(BasicAuthenticationAPI.CLOUD_TENANT);
 		String result = BiuUtils.toJson(ce);
 		return result;
 	}
+
 	
 	public static void test() {
 		ComputeEntity ce = new ComputeEntity();
@@ -46,5 +47,11 @@ public class ComputeEntity {
 	
 	public static void main(String[] args) {
 		ComputeEntity.test();
+	}
+
+	public static String buildOrchestration(String label, String name, String shape, String string, String imagelist,
+			String tags2) {
+		
+		return null;
 	}
 }

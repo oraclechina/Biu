@@ -10,6 +10,42 @@
             "desc": "登录",
             "prompt" : "none"
         },
+		{
+            "name": "summary",
+            "endpoint": "/summary/",
+            "desc": "汇总",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "CommonAPI-summary",
+					"endpoint": "/instance/{container}_/storage/volume/{container}/",
+		            "desc": "根租户用量统计报告",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "summarytenant",
+							"endpoint": "input",
+				            "desc": "请输入根租户名, 统计全部请输入all",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "CommonAPI-tenantlist",
+					"endpoint": "/instance/{container}_/storage/volume/{container}/",
+		            "desc": "子租户用量列表(未实现)",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "tenantlist_name",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }	            		
+			]			
+        },        
         {
             "name": "sshkeys",
             "endpoint": "/sshkey/{container}/",
@@ -311,7 +347,7 @@
 				{
 					"name": "ComputeAPI-createComputeInstance",
 					"endpoint": "/launchplan/",
-		            "desc": "创建计算实例",
+		            "desc": "创建普通计算实例",
 		            "prompt" : "input",
 		            "subcommand" : [
 		            	{
@@ -337,9 +373,65 @@
 							"endpoint": "input",
 				            "desc": "请输入SSH公钥名",
 				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "crtcomputeinstenant",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
+				            "prompt" : "input"
 		            	}		            	
 		            ]
 	            },
+				{
+					"name": "ComputeAPI-createComputeInstanceOrchestration",
+					"endpoint": "/platform/v1/orchestration/",
+		            "desc": "创建编排计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "2crtcomputeinsname",
+							"endpoint": "input",
+				            "desc": "请输入计算唯一实例名",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtcomputeinsshape",
+							"endpoint": "input",
+				            "desc": "请输入实例型号",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "2crtcomputeinsos",
+							"endpoint": "input",
+				            "desc": "请输入操作系统名",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtcomputeinsbootpk",
+							"endpoint": "input",
+				            "desc": "请输入启动存储卷大小(单位G)",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtcomputeinsdatapk",
+							"endpoint": "input",
+				            "desc": "请输入启动数据卷大小(单位G)",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtcomputeinssshpk",
+							"endpoint": "input",
+				            "desc": "请输入SSH公钥名",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtcomputeinstenant",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
+				            "prompt" : "input"
+		            	}		            	
+		            ]
+	            },	            
 				{
 					"name": "ComputeAPI-deleteComputeInstance",
 					"endpoint": "/instance/{name}",
@@ -352,6 +444,74 @@
 				            "desc": "请输入要删除的计算唯一实例名",
 				            "prompt" : "input"
 		            	}	            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-startCompute",
+					"endpoint": "/instance/{name}",
+		            "desc": "启动计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "startcomputeinsname",
+							"endpoint": "input",
+				            "desc": "请输入要启动的计算唯一实例名",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-stopCompute",
+					"endpoint": "/instance/{name}",
+		            "desc": "停止计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "stopcomputeinsname",
+							"endpoint": "input",
+				            "desc": "请输入要停机的计算唯一实例名",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-changeComputeTenant",
+					"endpoint": "/instance/{name}",
+		            "desc": "更改计算实例根租户",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "chtcomputeinsname",
+							"endpoint": "input",
+				            "desc": "请输入要操作的计算唯一实例名",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "chttenantname",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
+				            "prompt" : "input"
+		            	}		            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-changeComputeShape",
+					"endpoint": "/instance/{name}",
+		            "desc": "更改计算实例配置机型",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "chtcomputeinsname",
+							"endpoint": "input",
+				            "desc": "请输入要变配的唯一实例名",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "chtnewshape",
+							"endpoint": "input",
+				            "desc": "请输入新的Shape型号",
+				            "prompt" : "input"
+		            	}			            		            	
 		            ]
 	            }	                        
 	    	]
@@ -401,6 +561,12 @@
 							"endpoint": "input",
 				            "desc": "请直接输入要创建的存储盘大小数值, 单位默认G",
 				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "storageboottenant",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
+				            "prompt" : "input"
 		            	}
 		            ]
 	            },
@@ -414,6 +580,12 @@
 		            		"name": "storageblanksize",
 							"endpoint": "input",
 				            "desc": "请直接输入要创建的存储盘大小数值, 单位默认G",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "storageblanktenant",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
 				            "prompt" : "input"
 		            	}
 		            ]
@@ -491,7 +663,13 @@
 							"endpoint": "input",
 				            "desc": "请输入计算实例的vcable_id的值,可通过查看计算实例获取",
 				            "prompt" : "input"
-		            	}
+		            	},
+						{
+		            		"name": "sn_crttags",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
+				            "prompt" : "input"
+		            	}		            	
 		            ]
 	            },
 				{
@@ -539,6 +717,12 @@
 							"endpoint": "input",
 				            "desc": "是否为固定IP, 默认为true, 否请输入false",
 				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "sn_crtfixediptenant",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
+				            "prompt" : "input"
 		            	}
 		            ]
 	            },	
@@ -580,6 +764,12 @@
 		            		"name": "ipn_crtfixedip",
 							"endpoint": "input",
 				            "desc": "请输入经典网络下的固定IP名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "ipn_crtfixediptags",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
 				            "prompt" : "input"
 		            	}
 		            ]
@@ -629,7 +819,13 @@
 							"endpoint": "input",
 				            "desc": "请输入IP网络地址段(必须符合CIDR IPv4标准)",
 				            "prompt" : "input"
-		            	}
+		            	},
+	            		{
+		            		"name": "ipn_crtipntags",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
+				            "prompt" : "input"
+		            	}		            	
 		            ]
 	            },           
 				{
@@ -654,6 +850,20 @@
             "desc": "BiuBiu",
             "prompt" : "list",
 			"subcommand" : [
+			{
+					"name": "BiuBiuAPI-queryTransactionStatus",
+					"endpoint": "/biubiu/",
+		            "desc": "查询事务运行状态",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_3_xid",
+							"endpoint": "input",
+				            "desc": "请输入事务XID",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },			
 				{
 					"name": "BiuBiuAPI-createOracleDatabase11gR2AutoDeploy",
 					"endpoint": "/biubiu/",
@@ -693,7 +903,7 @@
 		            	{
 		            		"name": "biubiu_2_tenant",
 							"endpoint": "input",
-				            "desc": "租户名称",
+				            "desc": "根租户名称",
 				            "prompt" : "input"
 		            	},		            	
 		            	{
@@ -743,7 +953,7 @@
 		            	{
 		            		"name": "biubiu_1_tenant",
 							"endpoint": "input",
-				            "desc": "租户名称",
+				            "desc": "根租户名称",
 				            "prompt" : "input"
 		            	},		            	
 		            	{

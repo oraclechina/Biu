@@ -18,7 +18,10 @@ public class OracleJDBCTools {
 			String user = username;
 			String password = p_password;
 			con = DriverManager.getConnection(url, user, password);// 获取连接
-			if (null != con)
+			pre = con.prepareStatement("select count(*) from all_tables");
+			result = pre.executeQuery();
+			int scnt = result.getInt(1);
+			if ((null != con) && (scnt > 0))
 				pass = true;
 		} catch (Exception e) {
 			pass = false;
@@ -39,4 +42,8 @@ public class OracleJDBCTools {
 			}
 		}
 	}
+	
+	public static boolean checkConnection(String ip, String port, String sid, String username, String p_password, boolean skip_proxy) {
+		return true;
+	}	
 }

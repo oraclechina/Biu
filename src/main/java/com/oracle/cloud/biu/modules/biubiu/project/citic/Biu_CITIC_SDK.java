@@ -1,6 +1,7 @@
 package com.oracle.cloud.biu.modules.biubiu.project.citic;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public class Biu_CITIC_SDK {
 	/**
 	 * 全局状态表
 	 */
-	public static Map<String, Biu_CITIC_SDK_Desc> xmap;
+	public static Map<String, Biu_CITIC_SDK_Desc> xmap = new HashMap<String, Biu_CITIC_SDK_Desc>();
 	
 	/**
 	 * 一键供应一台拥有已运行Oracle数据库实例的VM计算服务
@@ -63,10 +64,6 @@ public class Biu_CITIC_SDK {
 		citic.setXdate(new Date());
 		xmap.put(xid, citic);
 		
-		new Thread() {
-			OracleDatabaseAutoDeploy deploy = new OracleDatabaseAutoDeploy();
-			OracleDatabaseAutoDeployRespEntity resp = deploy.deploy(sshkeyname, sshkeycontent, insname, shape, os, dbversion, tenant, sshprivatekey, xid, volumnsize, dbpassword, dbcharset, dbsid, oracledblisport, price1hour);
-		};
 		return citic;
 	}
 	

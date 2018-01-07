@@ -76,26 +76,26 @@ public class BiuConsoleAgent {
 		return result;
 	}
 
-	public static void executeStorageCreateBoot(JSONObject parentobj, JSONObject selfobj, List<KV> kvlist) throws Exception {
-		log.debug(parentobj.getString("name"));
-		log.debug(parentobj.getString("endpoint"));
-		if ((null != kvlist) && (kvlist.size() > 0)) {
-			JSONObject pobj = selfobj.getJSONObject(kvlist.get(0).getKey());
-			log.debug("self name:" + kvlist.get(0).getKey());
-			log.debug("self value:" + pobj.getString(kvlist.get(0).getValue()));
-			StorageAPI.createStorageBootVolumns(pobj.getString(kvlist.get(0).getValue()), parentobj.getString("endpoint"));
-		}
-	}
-	
-	public static void executeStorageCreateBlank(JSONObject parentobj, JSONObject selfobj, List<KV> kvlist) throws Exception {
-		log.debug(parentobj.getString("name"));
-		log.debug(parentobj.getString("endpoint"));
-		if ((null != kvlist) && (kvlist.size() > 0)) {
-			JSONObject pobj = selfobj.getJSONObject(kvlist.get(0).getKey());
-			log.debug("self name:" + kvlist.get(0).getKey());
-			log.debug("self value:" + pobj.getString(kvlist.get(0).getValue()));
-			StorageAPI.createStorageBlankVolumns(pobj.getString(kvlist.get(0).getValue()), parentobj.getString("endpoint"));
-		}
-	}
+//	public static void executeStorageCreateBoot(JSONObject parentobj, JSONObject selfobj, List<KV> kvlist) throws Exception {
+//		log.debug(parentobj.getString("name"));
+//		log.debug(parentobj.getString("endpoint"));
+//		if ((null != kvlist) && (kvlist.size() > 0)) {
+//			JSONObject pobj = selfobj.getJSONObject(kvlist.get(0).getKey());
+//			log.debug("self name:" + kvlist.get(0).getKey());
+//			log.debug("self value:" + pobj.getString(kvlist.get(0).getValue()));
+//			StorageAPI.createStorageBootVolumns(pobj.getString(kvlist.get(0).getValue()), parentobj.getString("endpoint"));
+//		}
+//	}
+//	
+//	public static void executeStorageCreateBlank(JSONObject parentobj, JSONObject selfobj, List<KV> kvlist) throws Exception {
+//		log.debug(parentobj.getString("name"));
+//		log.debug(parentobj.getString("endpoint"));
+//		if ((null != kvlist) && (kvlist.size() > 0)) {
+//			JSONObject pobj = selfobj.getJSONObject(kvlist.get(0).getKey());
+//			log.debug("self name:" + kvlist.get(0).getKey());
+//			log.debug("self value:" + pobj.getString(kvlist.get(0).getValue()));
+//			StorageAPI.createStorageBlankVolumns(pobj.getString(kvlist.get(0).getValue()), parentobj.getString("endpoint"));
+//		}
+//	}
 
 }

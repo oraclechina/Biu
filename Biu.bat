@@ -1,2 +1,2 @@
-java -jar target/Biu-jar-with-dependencies.jar _en
+java -jar target/Biu-jar-with-dependencies.jar _cn
 PAUSE

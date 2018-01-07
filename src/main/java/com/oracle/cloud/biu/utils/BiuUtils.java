@@ -5,10 +5,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -51,18 +55,19 @@ public class BiuUtils extends EncryptUtil {
 			Properties properties;
 			properties = new Properties();
 			try {
-				properties.load(BiuUtils.class.getClassLoader().getResourceAsStream("opc_rest_path.properties")); 
+				properties.load(BiuUtils.class.getClassLoader().getResourceAsStream("opc_rest_path.properties"));
 				propsMap = new HashMap<String, String>((Map) properties);
 				properties.putAll(propsMap);
 				String accountstr = FileUtils.readFileToString(new File(Biu.BIUPROFILE));
 				String source = BiuUtils.decrypted(accountstr);
-				Map<String, ? extends PromtResultItemIF> map1 = (Map<String, ? extends PromtResultItemIF>) JSON.parseObject(source);
-				
+				Map<String, ? extends PromtResultItemIF> map1 = (Map<String, ? extends PromtResultItemIF>) JSON
+						.parseObject(source);
+
 				propsMap.put("endpoint", ((JSONObject) map1.get("endpoint")).getString("input"));
 				propsMap.put("cloud_username", ((JSONObject) map1.get("clouduser")).getString("input"));
 				propsMap.put("cloud_tenant", ((JSONObject) map1.get("cloudtenant")).getString("input"));
 				propsMap.put("cloud_domain", ((JSONObject) map1.get("clouddomain")).getString("input"));
-				propsMap.put("cloud_password", ((JSONObject) map1.get("cloudpassword")).getString("input"));				
+				propsMap.put("cloud_password", ((JSONObject) map1.get("cloudpassword")).getString("input"));
 				return propsMap;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -77,12 +82,12 @@ public class BiuUtils extends EncryptUtil {
 		sdstr = sdstr.replaceAll("//", "/");
 		return sdstr;
 	}
-	
+
 	public static String kvNULL(String orgi, String key) {
 		String sdstr = orgi.replaceAll(key, "");
 		return sdstr;
 	}
-	
+
 	public static JsonNode rest(String method, String accept, String path) throws Exception {
 		HttpResponse<JsonNode> jsonresp = null;
 		if (method.equals("get")) {
@@ -104,7 +109,7 @@ public class BiuUtils extends EncryptUtil {
 		}
 		return jsonresp.getBody();
 	}
-	
+
 	public static JsonNode rest(String method, String accept, String path, String jsonbody) throws Exception {
 		HttpResponse<JsonNode> jsonresp = null;
 		if (method.equals("post")) {
@@ -123,6 +128,46 @@ public class BiuUtils extends EncryptUtil {
 		return jsonresp.getBody();
 	}
 
+	public static int rest(String method, String accept, String path, boolean withhead) throws Exception {
+		HttpResponse<JsonNode> jsonresp = null;
+		if (method.equals("get")) {
+			jsonresp = Unirest.get(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
+		} else if (method.equals("post")) {
+			jsonresp = Unirest.post(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
+		} else if (method.equals("put")) {
+			jsonresp = Unirest.put(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
+		} else if (method.equals("delete")) {
+			jsonresp = Unirest.delete(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
+		}
+		return jsonresp.getStatus();
+	}
+
+	public static int rest(String method, String accept, String path, String jsonbody, boolean withhead) throws Exception {
+		HttpResponse<JsonNode> jsonresp = null;
+		if (method.equals("post")) {
+			jsonresp = Unirest.post(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).body(jsonbody).asJson();
+		} else if (method.equals("put")) {
+			jsonresp = Unirest.put(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).body(jsonbody).asJson();
+		} else if (method.equals("delete")) {
+			jsonresp = Unirest.delete(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).body(jsonbody).asJson();
+		}
+		return jsonresp.getStatus();
+	}
+	
 	public static String ConvertStream2Json(InputStream inputStream) {
 		String jsonStr = "";
 		// ByteArrayOutputStream相当于内存输出流
@@ -141,21 +186,19 @@ public class BiuUtils extends EncryptUtil {
 		}
 		return jsonStr;
 	}
-	
+
 	public static String toJson(Object obj) {
 		return JSON.toJSONString(obj);
 	}
-	
+
 	public static void print(AsciiTableEntity en) {
 		System.out.println("\n" + FlipTable.of(en.getHeader(), en.getData()));
 	}
-	
+
 	public static AsciiTableEntity toAsciiTable(String method, org.json.JSONObject jsonobj) {
 		AsciiTableEntity en = new AsciiTableEntity();
-		String[] headers = { "Result"};
-		String[][] data = {
-				{ "ERROR" }
-		};
+		String[] headers = { "Result" };
+		String[][] data = { { "ERROR" } };
 		try {
 			if (null == jsonobj) {
 				en.setHeader(headers);
@@ -175,7 +218,7 @@ public class BiuUtils extends EncryptUtil {
 			tobj = jsonobj.opt("instances");
 			if (null != tobj)
 				flag = "hasLunchplan";
-			
+
 			if (method.indexOf("view") > -1)
 				flag = "hasView";
 
@@ -189,18 +232,19 @@ public class BiuUtils extends EncryptUtil {
 				en = goHasLunchplanResult(method, jsonobj, jsonobj.getJSONArray("instances"));
 			else if ("hasView".equals(flag))
 				en = goHasView(method, jsonobj);
-			
+
 		} catch (JSONException e) {
 			en.setHeader(headers);
 			en.setData(data);
 			e.printStackTrace();
 		}
-		
+
 		return en;
 	}
-	
-	private static AsciiTableEntity goHasLunchplanResult(String method, org.json.JSONObject jsonobj, org.json.JSONArray jsonary) {
-		String[] headers = { "Name"};
+
+	private static AsciiTableEntity goHasLunchplanResult(String method, org.json.JSONObject jsonobj,
+			org.json.JSONArray jsonary) {
+		String[] headers = { "Name" };
 		String[][] data = new String[jsonary.length()][1];
 		int i = 0;
 		for (Object tempobj : jsonary) {
@@ -218,7 +262,7 @@ public class BiuUtils extends EncryptUtil {
 		AsciiTableEntity en = new AsciiTableEntity();
 		if ("com.oracle.cloud.biu.api.StorageAPI-viewStorageVolumns".equals(method))
 			en = goHasStorageViewResult(jsonobj, en);
-		else if("com.oracle.cloud.biu.api.ComputeAPI-viewComputes".equals(method))
+		else if ("com.oracle.cloud.biu.api.ComputeAPI-viewComputes".equals(method))
 			en = goHasComputeViewResult(jsonobj, en);
 		else
 			en = goHasDefaultViewResult(jsonobj, en);
@@ -246,7 +290,7 @@ public class BiuUtils extends EncryptUtil {
 		obj.put(k, v);
 		obj.put(k2, v2);
 		List<KV> returnA = jsonToArray(obj);
-		String[] headers = { "Key", "Value"};
+		String[] headers = { "Key", "Value" };
 		String[][] data = new String[obj.keySet().size()][2];
 		int i = 0;
 		for (KV tkey : returnA) {
@@ -273,12 +317,12 @@ public class BiuUtils extends EncryptUtil {
 		if ("networking".equals(except)) {
 			if (tkey.getKey().equals(except)) {
 				List<KV> returnB = jsonToArray(obj.optJSONObject(except));
-				String[] innerHeaders = { "Key", "Value"};
+				String[] innerHeaders = { "Key", "Value" };
 				String[][] innerData = new String[returnB.size()][2];
 				int j = 0;
 				for (KV t2key : returnB) {
 					List<KV> returnC = jsonToArray(obj.optJSONObject(except).optJSONObject(t2key.getKey()));
-					String[] inner2Headers = { "Key", "Value"};
+					String[] inner2Headers = { "Key", "Value" };
 					String[][] inner2Data = new String[returnC.size()][2];
 					String inner2 = null;
 					int k = 0;
@@ -297,7 +341,7 @@ public class BiuUtils extends EncryptUtil {
 		}
 		if ("storage_attachments".equals(except)) {
 			if (tkey.getKey().equals(except)) {
-				String[] innerHeaders = { "Volumn", "Index"};
+				String[] innerHeaders = { "Volumn", "Index" };
 				String[][] innerData;
 				List<KV> tlist = new ArrayList<KV>();
 				Collection<KV> ckv = storageAttachmentRelationMap.values();
@@ -306,9 +350,10 @@ public class BiuUtils extends EncryptUtil {
 					innerData = new String[0][2];
 				}
 				for (KV kv : ckv) {
-//					System.out.println("kv value:" + kv.getValue());
-//					System.out.println("mask name:" + mask(obj.optString("name")));
-					if(kv.getValue().indexOf(obj.optString("name")) > -1) {
+					// System.out.println("kv value:" + kv.getValue());
+					// System.out.println("mask name:" +
+					// mask(obj.optString("name")));
+					if (kv.getValue().indexOf(obj.optString("name")) > -1) {
 						p++;
 						tlist.add(kv);
 					}
@@ -330,10 +375,10 @@ public class BiuUtils extends EncryptUtil {
 		}
 		return inner;
 	}
-	
+
 	private static AsciiTableEntity goHasDefaultViewResult(org.json.JSONObject obj, AsciiTableEntity en) {
 		List<KV> returnA = jsonToArray(obj);
-		String[] headers = { "Key", "Value"};
+		String[] headers = { "Key", "Value" };
 		String[][] data = new String[obj.keySet().size()][2];
 		int i = 0;
 		for (KV tkey : returnA) {
@@ -353,11 +398,10 @@ public class BiuUtils extends EncryptUtil {
 			cacheStorageAttachementRelation(jsonArray);
 			en = goHasStorageShowResult(jsonArray, en);
 			log.debug("[Done] Cached Storage Attachment Relation");
-		}
-		else if ("com.oracle.cloud.biu.api.SecurityAPI-listSSHKeys".equals(method))
+		} else if ("com.oracle.cloud.biu.api.SecurityAPI-listSSHKeys".equals(method))
 			en = goHasSecurityShowResult(jsonArray, en);
 		else if ("com.oracle.cloud.biu.api.CommonAPI-listShape".equals(method))
-			en = goHasShapeShowResult(jsonArray, en);		
+			en = goHasShapeShowResult(jsonArray, en);
 		else if ("com.oracle.cloud.biu.api.CommonAPI-listOSImages".equals(method))
 			en = goHasOSShowResult(jsonArray, en);
 		else if ("com.oracle.cloud.biu.api.NetworkAPI-listSharedFixIPs".equals(method))
@@ -376,7 +420,7 @@ public class BiuUtils extends EncryptUtil {
 	}
 
 	private static AsciiTableEntity goHasComputeInstancesShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name", "State", "Public IP"};
+		String[] headers = { "Name", "State", "Public IP" };
 		String[][] data = new String[jsonArray.length()][3];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
@@ -391,7 +435,7 @@ public class BiuUtils extends EncryptUtil {
 					data[i][2] = kv.getValue();
 				else
 					data[i][2] = "";
-			}			
+			}
 			i++;
 		}
 		en.setHeader(headers);
@@ -400,7 +444,7 @@ public class BiuUtils extends EncryptUtil {
 	}
 
 	private static AsciiTableEntity goHasIPNetworkIPShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name", "ipAddress"};
+		String[] headers = { "Name", "ipAddress" };
 		String[][] data = new String[jsonArray.length()][2];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
@@ -415,7 +459,7 @@ public class BiuUtils extends EncryptUtil {
 	}
 
 	private static AsciiTableEntity goHasSharedNetworkShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name", "IP", "Permanent", "Used"};
+		String[] headers = { "Name", "IP", "Permanent", "Used" };
 		String[][] data = new String[jsonArray.length()][4];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
@@ -432,7 +476,7 @@ public class BiuUtils extends EncryptUtil {
 	}
 
 	private static AsciiTableEntity goHasIPNetworkShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name", "IP Prefix", "IP Exchange"};
+		String[] headers = { "Name", "IP Prefix", "IP Exchange" };
 		String[][] data = new String[jsonArray.length()][3];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
@@ -451,7 +495,7 @@ public class BiuUtils extends EncryptUtil {
 	}
 
 	private static AsciiTableEntity goHasOSShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name", "Available"};
+		String[] headers = { "Name", "Available" };
 		String[][] data = new String[jsonArray.length()][2];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
@@ -466,18 +510,18 @@ public class BiuUtils extends EncryptUtil {
 	}
 
 	private static AsciiTableEntity goHasShapeShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name", "OCPUs", "vCPUs", "GPUs", "Memory"};
+		String[] headers = { "Name", "OCPUs", "vCPUs", "GPUs", "Memory" };
 		String[][] data = new String[jsonArray.length()][5];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
 			org.json.JSONObject obj = (org.json.JSONObject) tempobj;
 			data[i][0] = obj.getString("name");
-			data[i][1] = String.valueOf(obj.getInt("cpus")/2);
+			data[i][1] = String.valueOf(obj.getInt("cpus") / 2);
 			data[i][2] = String.valueOf(obj.getInt("cpus"));
 			data[i][3] = String.valueOf(obj.getInt("gpus"));
 			BigDecimal bigd = new BigDecimal(obj.getInt("ram"));
 			BigDecimal unit = new BigDecimal("1024");
-			bigd = bigd.divide(unit).setScale(1,BigDecimal.ROUND_UP);
+			bigd = bigd.divide(unit).setScale(1, BigDecimal.ROUND_UP);
 			data[i][4] = bigd.toString().replaceAll("\\.0", "") + "G";
 			i++;
 		}
@@ -486,7 +530,7 @@ public class BiuUtils extends EncryptUtil {
 		return en;
 	}
 
-	private static void cacheStorageAttachementRelation(JSONArray jsonArray) {
+	public static void cacheStorageAttachementRelation(JSONArray jsonArray) {
 		try {
 			org.json.JSONObject jsonobj = StorageAPI.listStorageAttachment(propsMap.get("list_storage_attachment"));
 			if (null == jsonobj)
@@ -506,8 +550,8 @@ public class BiuUtils extends EncryptUtil {
 			e.printStackTrace();
 		}
 	}
-	
-	private static void cacheNetworkAttachementRelation(JSONArray jsonArray) {
+
+	public static void cacheNetworkAttachementRelation(JSONArray jsonArray) {
 		try {
 			org.json.JSONObject jsonobj = NetworkAPI.listNetworkAssociations(propsMap.get("list_network_associations"));
 			if (null == jsonobj)
@@ -548,7 +592,7 @@ public class BiuUtils extends EncryptUtil {
 		obj.put(k, v);
 		obj.put(k2, v2);
 		List<KV> returnA = jsonToArray(obj);
-		String[] headers = { "Key", "Value"};
+		String[] headers = { "Key", "Value" };
 		String[][] data = new String[obj.keySet().size()][2];
 		int i = 0;
 		for (KV tkey : returnA) {
@@ -566,12 +610,12 @@ public class BiuUtils extends EncryptUtil {
 		en.setData(data);
 		return en;
 	}
-	
+
 	public static List<KV> jsonToArray(org.json.JSONObject obj) {
 		List<KV> returnA = new ArrayList<KV>();
 		if ((null != obj) && (obj.keySet().size() > 0)) {
 			Iterator<?> keys = obj.keys();
-			while(keys.hasNext()) {
+			while (keys.hasNext()) {
 				String key = (String) keys.next();
 				KV kv = new KV();
 				kv.setKey(key);
@@ -579,9 +623,9 @@ public class BiuUtils extends EncryptUtil {
 				returnA.add(kv);
 			}
 		}
-        return returnA;
+		return returnA;
 	}
-	
+
 	public static List<KV> jsonaryToArray(org.json.JSONArray obj) {
 		List<KV> returnA = new ArrayList<KV>();
 		if ((null != obj) && (obj.length() > 0)) {
@@ -589,7 +633,7 @@ public class BiuUtils extends EncryptUtil {
 				org.json.JSONObject tk = obj.getJSONObject(i);
 				if ((null != obj) && (tk.keySet().size() > 0)) {
 					Iterator<?> keys = tk.keys();
-					while(keys.hasNext()) {
+					while (keys.hasNext()) {
 						String key = (String) keys.next();
 						KV kv = new KV();
 						kv.setKey(key);
@@ -603,7 +647,7 @@ public class BiuUtils extends EncryptUtil {
 	}
 
 	public static AsciiTableEntity goHasSecurityShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name", "Enabled"};
+		String[] headers = { "Name", "Enabled" };
 		String[][] data = new String[jsonArray.length()][2];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
@@ -616,9 +660,9 @@ public class BiuUtils extends EncryptUtil {
 		en.setData(data);
 		return en;
 	}
-	
+
 	public static AsciiTableEntity goHasShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name"};
+		String[] headers = { "Name" };
 		String[][] data = new String[jsonArray.length()][1];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
@@ -629,10 +673,10 @@ public class BiuUtils extends EncryptUtil {
 		en.setHeader(headers);
 		en.setData(data);
 		return en;
-	}	
-	
+	}
+
 	public static AsciiTableEntity goHasStorageShowResult(JSONArray jsonArray, AsciiTableEntity en) {
-		String[] headers = { "Name", "Size", "Status", "Attachment"};
+		String[] headers = { "Name", "Size", "Status", "Attachment" };
 		String[][] data = new String[jsonArray.length()][4];
 		int i = 0;
 		for (Object tempobj : jsonArray) {
@@ -661,15 +705,14 @@ public class BiuUtils extends EncryptUtil {
 	}
 
 	private static String mask(String tempname) {
-		return tempname.replaceAll("/" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/", "...");
+		return tempname.replaceAll(
+				"/" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/", "...");
 	}
 
 	private static AsciiTableEntity goHasMessage(String message) {
 		AsciiTableEntity en = new AsciiTableEntity();
-		String[] headers = { "Name"};
-		String[][] data = {
-				{ message }
-		};
+		String[] headers = { "Name" };
+		String[][] data = { { message } };
 		en.setHeader(headers);
 		en.setData(data);
 		return en;
@@ -677,25 +720,23 @@ public class BiuUtils extends EncryptUtil {
 
 	private static AsciiTableEntity goHasName(String strname) {
 		AsciiTableEntity en = new AsciiTableEntity();
-		String[] headers = { "Name"};
-		String[][] data = {
-				{ strname }
-		};
+		String[] headers = { "Name" };
+		String[][] data = { { strname } };
 		en.setHeader(headers);
 		en.setData(data);
 		return en;
 	}
 
 	public static String getRandomString(int length) {
-	    String base = "abcdefghijklmnopqrstuvwxyz0123456789";   
-	    Random random = new Random();   
-	    StringBuffer sb = new StringBuffer();   
-	    for (int i = 0; i < length; i++) {   
-	        int number = random.nextInt(base.length());   
-	        sb.append(base.charAt(number));   
-	    }   
-	    return sb.toString();   
-	 }
+		String base = "abcdefghijklmnopqrstuvwxyz0123456789";
+		Random random = new Random();
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < length; i++) {
+			int number = random.nextInt(base.length());
+			sb.append(base.charAt(number));
+		}
+		return sb.toString();
+	}
 
 	public static String encrypted(String input) throws Exception {
 		return encrypt(input);
@@ -707,8 +748,9 @@ public class BiuUtils extends EncryptUtil {
 
 	public static boolean checkAvailable(String accountstr) throws Exception {
 		String source = decrypted(accountstr);
-//		log.debug("source=" + source);
-		Map<String, ? extends PromtResultItemIF> map1 = (Map<String, ? extends PromtResultItemIF>) JSON.parseObject(source);
+		// log.debug("source=" + source);
+		Map<String, ? extends PromtResultItemIF> map1 = (Map<String, ? extends PromtResultItemIF>) JSON
+				.parseObject(source);
 		if (null != map1)
 			return true;
 		return false;
@@ -716,13 +758,60 @@ public class BiuUtils extends EncryptUtil {
 
 	public static org.json.JSONObject getSucReturn(String string) {
 		org.json.JSONObject j = new org.json.JSONObject();
-		j.put("message", "操作完毕，请再次检查");
+		if (!StringUtils.isBlank(string)) {
+			if (string.length() > 10)
+				j.put("message", "操作完毕，请再次校验，输出内容：" + string.substring(1, 9));
+			else
+				j.put("message", "操作完毕，请再次校验，输出内容：" + string);
+			j.put("biureturn", string);			
+		} else
+			j.put("message", "操作完毕，请再次校验，输出内容：" + string);
+		return j;
+	}
+	
+	public static org.json.JSONObject getSucReturn(String string, org.json.JSONObject biureturn) {
+		org.json.JSONObject j = new org.json.JSONObject();
+		if (!StringUtils.isBlank(string)) {
+			if (string.length() > 10)
+				j.put("message", "操作完毕，请再次校验，输出内容：" + string.substring(1, 9));
+			else
+				j.put("message", "操作完毕，请再次校验，输出内容：" + string);
+			j.put("biureturn", biureturn);
+		} else
+			j.put("message", "操作完毕，请再次校验，输出内容：" + string);
 		return j;
 	}	
-	
+
 	public static org.json.JSONObject getErrReturn(String string, String message) {
 		org.json.JSONObject j = new org.json.JSONObject();
 		j.put("message", "操作失败原因[" + string + "]：" + message);
 		return j;
-	}	
+	}
+	
+	public static org.json.JSONObject getErrReturn(String string, String message, boolean withhead) {
+		org.json.JSONObject j = new org.json.JSONObject();
+		j.put("message", "操作失败原因[" + string + "]：" + message);
+		j.put("biureturn", message);
+		return j;
+	}
+
+	/**
+	 * 计算两个时间之间的差值，根据标志的不同而不同
+	 * 
+	 * @param flag
+	 *            计算标志，表示按照年/月/日/时/分/秒等计算
+	 * @param calSrc
+	 *            减数
+	 * @param calDes
+	 *            被减数
+	 * @return 两个日期之间的差值
+	 */
+	public static int dateDiff(Date date1, Date date2) {
+		// 日期相减得到相差的日期
+		long minu = (date1.getTime() - date2.getTime()) / (60 * 1000) > 0
+				? (date1.getTime() - date2.getTime()) / (60 * 1000)
+				: (date2.getTime() - date1.getTime()) / (60 * 1000);
+
+		return (int) minu;
+	}
 }

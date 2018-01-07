@@ -12,7 +12,7 @@ public class BasicAuthenticationAPI {
 	public static String ENDPOINT = "";
 	public static String ACCEPT_COMPUTE = "application/oracle-compute-v3+json";
 	public static String ACCEPT_COMPUTE_DIR = "application/oracle-compute-v3+directory+json";
-	public static String CONTENT_TYPE = "application/json";
+	public static String CONTENT_TYPE = "application/oracle-compute-v3+json";
 	public static String CLOUD_USERNAME = "";
 	public static String CLOUD_DOMAIN = "";
 	public static String CLOUD_PASSWORD = "";

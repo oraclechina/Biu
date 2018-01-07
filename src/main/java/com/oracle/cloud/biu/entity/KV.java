@@ -13,6 +13,7 @@ public class KV implements Serializable {
 
 	private String key;
 	private String value;
+	private String shape;
 	private String reserve1;
 	private String reserve2;
 	private String reserve3;

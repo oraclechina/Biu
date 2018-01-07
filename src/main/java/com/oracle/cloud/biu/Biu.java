@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.oracle.cloud.biu.api.BasicAuthenticationAPI;
 import com.oracle.cloud.biu.api.ComputeAPI;
 import com.oracle.cloud.biu.api.NetworkAPI;
+import com.oracle.cloud.biu.api.StorageAPI;
 import com.oracle.cloud.biu.entity.KV;
 import com.oracle.cloud.biu.utils.BiuUtils;
 import com.thoughtworks.xstream.XStream;
@@ -36,11 +37,16 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class Biu {
 
-	public static final String BIUPROFILE = "./biuaccount";
+	public static String BIUPROFILE = "./biuaccount";
 	public static JSONObject MENU = null;
 	public static Map<String, JSONObject> MENUMAP;
 	public static Map<String, JSONObject> MENURELATIONMAP;
+	public static Map<String, String> SHAPEMAP = new HashMap<String, String>();
 	public static String language = "_en";
+	public static final int QUOTA_OCPU = 5;
+	public static final int QUOTA_MEM = 300;
+	public static final int QUOTA_VOLUMN = 800;	
+	public static final String PUBLIC_IP_POOL = "/oracle/public/ippool";
 
 	public static void main(String[] args) {
 		try {
@@ -52,6 +58,10 @@ public class Biu {
 			if ((null != args) && (args.length > 0)) {
 				language = args[0];
 			}
+			String pluginboot = "";
+			if ((null != args) && (args.length > 1)) {
+				pluginboot = args[1];
+			}
 			String accountstr = FileUtils.readFileToString(new File(BIUPROFILE));
 			initBiu(accountstr);
 			loadPrompt();
@@ -62,8 +72,16 @@ public class Biu {
 			BasicAuthenticationAPI.setUserInfoForLogin(m.get("cloud_tenant"), m.get("endpoint"), m.get("cloud_domain"),
 					m.get("cloud_username"), m.get("cloud_password"));
 			BasicAuthenticationAPI.login(m.get("login"));
-//			NetworkAPI.listNetworkAssociations(m.get("list_network_associations"));
-			showInteractiveMenu(MENU, MENU);
+			
+			//Cached
+			org.json.JSONObject obj1 = StorageAPI.listStorageVolumns(m.get("storagevolumns"));
+			org.json.JSONObject obj2 = NetworkAPI.listNetworkAssociations(m.get("list_network_associations"));
+			BiuUtils.cacheStorageAttachementRelation(obj1.optJSONArray("result"));
+			BiuUtils.cacheNetworkAttachementRelation(obj2.optJSONArray("result"));
+			
+			if (StringUtils.isBlank(pluginboot)) {
+				showInteractiveMenu(MENU, MENU);
+			}
 			
 			
 			
@@ -104,7 +122,7 @@ public class Biu {
 			// NetworkAPI.listSharedFixIPs(m.get("shared_fixip"));
 			// IP ip = NetworkAPI.createSharedFixIP(m.get("create_fixip"));
 			// StorageAPI.listStorageVolumns(m.get("storagevolumns"));
-			// ComputeAPI.createComputeInstance("oc3", "/oracle/public/OL_7.2_UEKR4_x86_64", m.get("createcompute"));
+//			 ComputeAPI.createComputeInstance(m.get("createcompute"), "biuins11", "oc3", "/oracle/public/OL_7.2_UEKR4_x86_64", "zhiqiang", "TenantUser1");
 			//
 			// String vcable =
 			// ComputeAPI.getVcable(m.get("viewcompute"),
@@ -151,6 +169,7 @@ public class Biu {
 				+ "Biu is a opensource framework for Oracle Public Cloud and Oracle Cloud At Customer base on GPL-3.0 license\n" + "Biu Author Is China Cloud Team zhiqiang.x.liu@oracle.com.|@"));
 		System.out.println("  ___                 _        ____ ___ _   _\n / _ \\ _ __ __ _  ___| | ___  | __ )_ _| | | |\n| | | | '__/ _` |/ __| |/ _ \\ |  _ \\| || | | |\n| |_| | | | (_| | (__| |  __/ | |_) | || |_| |\n \\___/|_|  \\__,_|\\___|_|\\___| |____/___|\\___/");
 		System.out.println(" _     _         ______     _       _\n| |   (_)_   _  |__  / |__ (_) __ _(_) __ _ _ __   __ _\n| |   | | | | |   / /| '_ \\| |/ _` | |/ _` | '_ \\ / _` |\n| |___| | |_| |  / /_| | | | | (_| | | (_| | | | | (_| |\n|_____|_|\\__,_| /____|_| |_|_|\\__, |_|\\__,_|_| |_|\\__, |\n                                 |_|              |___/");
+		initShape();
 		if (StringUtils.isEmpty(accountstr)) {
 			try {
 				HashMap<String, ? extends PromtResultItemIF> result = initPrompt();
@@ -188,6 +207,23 @@ public class Biu {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void initShape() {
+		Biu.SHAPEMAP.put("oc3", "1_8");
+		Biu.SHAPEMAP.put("oc4", "2_15");
+		Biu.SHAPEMAP.put("oc5", "4_30");
+		Biu.SHAPEMAP.put("oc6", "8_60");
+		Biu.SHAPEMAP.put("oc7", "16_120");
+		Biu.SHAPEMAP.put("oc1m", "1_15");
+		Biu.SHAPEMAP.put("oc2m", "2_30");
+		Biu.SHAPEMAP.put("oc3m", "4_60");
+		Biu.SHAPEMAP.put("oc4m", "8_120");
+		Biu.SHAPEMAP.put("oc5m", "16_240");
+		
+		Biu.SHAPEMAP.put("ecc1", "8_32");
+		Biu.SHAPEMAP.put("ecc2", "16_64");
+		Biu.SHAPEMAP.put("ecc3", "32_128");
 	}
 
 	private static void showInteractiveMenu(JSONObject t, JSONObject t1) throws Exception {

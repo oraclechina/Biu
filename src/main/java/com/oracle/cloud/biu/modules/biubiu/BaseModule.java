@@ -13,7 +13,7 @@ import com.oracle.cloud.biu.utils.BiuUtils;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public abstract class BaseModule {
+public abstract class BaseModule extends Thread {
 
 	protected Map<String, String> m = null;
 	
@@ -36,7 +36,13 @@ public abstract class BaseModule {
 	}
 	public abstract void init();
 	
-	public abstract RespEntity deploy(String...params);
+	public abstract RespEntity deploy();
 	
 	public abstract RespEntity query(String...params);
+	
+	public abstract RespEntity rollback(XTransaction xtranc);
+	
+	public abstract boolean bomb(String orchid);
+	
+	public abstract void nuke(String orchid);
 }

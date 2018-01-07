@@ -10,6 +10,42 @@
             "desc": "Login",
             "prompt" : "none"
         },
+		{
+            "name": "summary",
+            "endpoint": "/summary/",
+            "desc": "Summary",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "CommonAPI-summary",
+					"endpoint": "/instance/{container}_/storage/volume/{container}/",
+		            "desc": "Root Tenant Usage and Statistics Report",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "summarytenant",
+							"endpoint": "input",
+				            "desc": "Please Input The Root Tenant Name, If You Want To Summarize The Whole Resources, Input all",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "CommonAPI-tenantlist",
+					"endpoint": "/instance/{container}_/storage/volume/{container}/",
+		            "desc": "Sub Tenant Statistics Report(N/A)",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "tenantlist_name",
+							"endpoint": "input",
+				            "desc": "Please Input The Root Tenant Name",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }
+			]			
+        },
         {
             "name": "sshkeys",
             "endpoint": "/sshkey/{container}/",
@@ -337,7 +373,13 @@
 							"endpoint": "input",
 				            "desc": "Please Input SSH Key Name",
 				            "prompt" : "input"
-		            	}		            	
+		            	},
+						{
+		            		"name": "crtcomputeinstenant",
+							"endpoint": "input",
+				            "desc": "Please Input The Tenant Name",
+				            "prompt" : "input"
+		            	}
 		            ]
 	            },
 				{
@@ -401,6 +443,12 @@
 							"endpoint": "input",
 				            "desc": "Please Input Boot Volumn Size(Unit G)",
 				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "storageboottenant",
+							"endpoint": "input",
+				            "desc": "Please Input The Tenant Name",
+				            "prompt" : "input"
 		            	}
 		            ]
 	            },
@@ -414,6 +462,12 @@
 		            		"name": "storageblanksize",
 							"endpoint": "input",
 				            "desc": "Please Input Blank Volumn Size(Unit G)",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "storageblanktenant",
+							"endpoint": "input",
+				            "desc": "Please Input The Tenant Name",
 				            "prompt" : "input"
 		            	}
 		            ]
@@ -491,6 +545,12 @@
 							"endpoint": "input",
 				            "desc": "Please Input Compute Instance vcable_id, Can Get The Value From View Compute Instance",
 				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "sn_crttags",
+							"endpoint": "input",
+				            "desc": "Please Input The Tenant Name",
+				            "prompt" : "input"
 		            	}
 		            ]
 	            },
@@ -539,6 +599,12 @@
 							"endpoint": "input",
 				            "desc": "Is This A Fixed IP? Default Is true, If Not Input false",
 				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "sn_crtfixediptenant",
+							"endpoint": "input",
+				            "desc": "Please Input The Tenant Name",
+				            "prompt" : "input"
 		            	}
 		            ]
 	            },	
@@ -580,6 +646,12 @@
 		            		"name": "ipn_crtfixedip",
 							"endpoint": "input",
 				            "desc": "Please Input IP Reservation Name(IP Network)",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "ipn_crtfixediptags",
+							"endpoint": "input",
+				            "desc": "Please Input The Tenant Name",
 				            "prompt" : "input"
 		            	}
 		            ]
@@ -628,6 +700,12 @@
 		            		"name": "ipn_crtipnrange",
 							"endpoint": "input",
 				            "desc": "Please Input Network Range BY CIDR(IPv4)",
+				            "prompt" : "input"
+		            	},
+	            		{
+		            		"name": "ipn_crtipntags",
+							"endpoint": "input",
+				            "desc": "Please Input The Tenant Name",
 				            "prompt" : "input"
 		            	}
 		            ]

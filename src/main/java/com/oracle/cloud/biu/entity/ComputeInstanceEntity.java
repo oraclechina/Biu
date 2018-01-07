@@ -15,5 +15,6 @@ public class ComputeInstanceEntity {
 	String name;
 	String label;
 	List<String> sshkeys = new ArrayList<>();
+	List<String> tags = new ArrayList<>();
 	
 }

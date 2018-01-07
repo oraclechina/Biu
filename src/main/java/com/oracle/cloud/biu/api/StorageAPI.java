@@ -57,20 +57,20 @@ public class StorageAPI {
 		return node.getObject();
 	}
 
-	public static JSONObject createStorageBootVolumns(String path, String size) throws Exception {
+	public static JSONObject createStorageBootVolumns(String path, String size, String tags) throws Exception {
 		String addition = "\"bootable\": \"true\", \"imagelist\": \"/oracle/public/OL_7.2_UEKR4_x86_64\",";
-		String storagename = "vol_" + BiuUtils.getRandomString(3);
+		String storagename = "vol_" + tags + "_" + BiuUtils.getRandomString(3);
 		String jsonbody = "{  \"size\": \"" + size
-				+ "G\",  \"properties\": [\"/oracle/public/storage/latency\"], " + addition + "  \"name\": \""+BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + storagename + "\",  \"tags\": [\"" + BasicAuthenticationAPI.CLOUD_TENANT + "\"]}";
+				+ "G\",  \"properties\": [\"/oracle/public/storage/latency\"], " + addition + "  \"name\": \""+BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + storagename + "\",  \"tags\": [\"" + tags + "\"]}";
 		JsonNode node = BiuUtils.rest("post", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
 		log.debug(node.getObject());
 		return node.getObject();
 	}
 
-	public static JSONObject createStorageBlankVolumns(String path, String size) throws Exception {
-		String storagename = "vol_" + BiuUtils.getRandomString(3);
+	public static JSONObject createStorageBlankVolumns(String path, String size, String tags) throws Exception {
+		String storagename = "vol_" + tags + "_" + BiuUtils.getRandomString(3);
 		String jsonbody = "{  \"size\": \"" + size
-				+ "G\",  \"properties\": [\"/oracle/public/storage/latency\"], \"name\": \"" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + storagename + "\",  \"tags\": [\"" + BasicAuthenticationAPI.CLOUD_TENANT + "\"]}";
+				+ "G\",  \"properties\": [\"/oracle/public/storage/latency\"], \"name\": \"" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + storagename + "\",  \"tags\": [\"" + tags + "\"]}";
 		JsonNode node = BiuUtils.rest("post", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
 		log.debug(node.getObject());
 		return node.getObject();
