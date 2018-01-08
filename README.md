@@ -15,6 +15,7 @@ Nobody for now.
 
 # Biu - User List
 **Oracle China CPSC Team**<br />
+**Oracle China Cloud Team**<br />
 **Oracle China OSC Team**<br />
 **Oracle China SCC Team**<br />
 
