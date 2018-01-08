@@ -28,12 +28,12 @@ The current version is **v2.3**, the next coming version is **3.0**<br/>
 **v6.0** will be a end release, Biu will support a mirror function, can mirror VM from AWS to Oracle Cloud.<br/>
 
 # Compile and Run
-** mvn package && biu **<br/>
+mvn package && biu<br/>
 
 # Init Infomation Example
 **Endpoint:https://compute.uscom-central-1.oraclecloud.com**<br />
 **Username:cloud.admin**<br />
-**Password:**********<br />
+**Password:###########**<br />
 **Domain:gse00012384**<br />
 
 # You need add Oracle JDBC Driver into maven repository by your self
