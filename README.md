@@ -13,6 +13,11 @@ Notification Email: zhiqiang.x.liu@oracle.com
 List who used Biu code but don't let me know.<br/>
 Nobody for now.
 
+# Biu - User List
+Oracle China CPSC Team
+Oracle China OSC Team
+Oracle China SCC Team
+
 # Biu - Blue Plan
 The current version is v2.3, the next coming version is 3.0<br/>
 v3.0 will be great release, can one click deploy Oracle RAC in OPC, OCM<br/>
@@ -21,11 +26,14 @@ v4.5 will be integrate with <a href="https://github.com/guangleibao/jiu">Jiu</a>
 v5.0 will be great release, Biu will support canvas web UI, can design a solution architecture with drag and drop, like ravello.<br/>
 v6.0 will be a end release, Biu will support a mirror function, can mirror VM from AWS to Oracle Cloud.<br/>
 
+# Compile and Run
+** mvn package && biu **<br/>
+
 # Init Infomation Example
-#Endpoint:https://compute.uscom-central-1.oraclecloud.com<br />
-#Username:cloud.admin<br />
-#Password:**********<br />
-#Domain:gse00012384<br />
+**Endpoint:https://compute.uscom-central-1.oraclecloud.com**<br />
+**Username:cloud.admin**<br />
+**Password:**********<br />
+**Domain:gse00012384**<br />
 
 # You need add Oracle JDBC Driver into maven repository by your self
 mvn install:install-file -Dfile=D:/download/ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=12.1.0 -Dpackaging=jar
