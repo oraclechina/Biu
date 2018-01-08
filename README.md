@@ -13,7 +13,7 @@ Notification Email: zhiqiang.x.liu@oracle.com
 List who used Biu code but don't let me know.<br/>
 Nobody for now.
 
-# Biu Blue Plan
+# Biu - Blue Plan
 The current version is v2.3, the next coming version is 3.0<br/>
 v3.0 will be great release, can one click deploy Oracle RAC in OPC, OCM<br/>
 v4.0 will be fresh release, can one click deploy Nginx + 2 Node Tomcat, support SLB<br/>
