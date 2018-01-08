@@ -11,6 +11,7 @@ Notification Email: zhiqiang.x.liu@oracle.com
 
 # = Programmer Black List = 
 List who used Biu code but don't let me know.<br/>
+Nobody for now.
 
 # Init Infomation Example
 #Endpoint:https://compute.uscom-central-1.oraclecloud.com<br />
