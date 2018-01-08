@@ -9,6 +9,9 @@ Base On GPL3.0<br/>
 Anybody who used Biu any code, he/she have to let me know. Since you have used Biu any code, it means you have agree this license.<br/>
 Notification Email: zhiqiang.x.liu@oracle.com
 
+# = Programmer Black List = 
+List who used Biu code but don't let me know.<br/>
+
 # Init Infomation Example
 #Endpoint:https://compute.uscom-central-1.oraclecloud.com<br />
 #Username:cloud.admin<br />
