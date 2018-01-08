@@ -4,6 +4,11 @@
 Biu is a Java SDK who has been realized fully Rest API for Oracle Public Cloud and Oracle At Customer<br />
 Biu have a console UI for customer can easy use Oracle Public Cloud and Oracle At Customer
 
+# ============= License Agreement =============
+Base On GPL3.0
+Anybody who used Biu any code, he/she have to let me know. Since you have used Biu any code, it means you have agree this license.
+Notification Email: zhiqiang.x.liu@oracle.com
+
 # Init Infomation Example
 #Endpoint:https://compute.uscom-central-1.oraclecloud.com<br />
 #Username:cloud.admin<br />
