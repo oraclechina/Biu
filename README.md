@@ -36,6 +36,11 @@ Username:cloud.admin<br />
 Password:###########<br />
 Domain:gse00012384<br />
 
+# Installation Biu For Plugin Module
+In your program entry point add the below code and make sure the code can only be execute once.<br/>
+Biu.BIUPROFILE = "D:/project/Biu-orc/src/main/lib/biuaccount";<br/>
+Biu.main(new String[] { "_cn", "plugin" });<br/>     
+
 # You need add Oracle JDBC Driver into maven repository by your self
 mvn install:install-file -Dfile=D:/download/ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=12.1.0 -Dpackaging=jar
 
