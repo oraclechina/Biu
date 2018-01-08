@@ -1,6 +1,6 @@
 # Biu Eco System
 
-#A fully opensource code framework base on Java for Oracle Public Cloud and Oracle At Customer<br />
+A fully opensource code framework base on Java for Oracle Public Cloud and Oracle At Customer<br />
 Biu is a Java SDK who has been realized fully Rest API for Oracle Public Cloud and Oracle At Customer<br />
 Biu have a console UI for customer can easy use Oracle Public Cloud and Oracle At Customer
 
@@ -9,7 +9,7 @@ Base On GPL3.0<br/>
 Anybody who used Biu any code, he/she have to let me know. Since you have used Biu any code, it means you have agree this license.<br/>
 Notification Email: zhiqiang.x.liu@oracle.com
 
-# = Programmer Black List = 
+# Programmer Black List
 List who used Biu code but don't let me know.<br/>
 Nobody for now.
 
