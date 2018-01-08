@@ -31,10 +31,10 @@ The current version is **v2.3**, the next coming version is **3.0**<br/>
 mvn package && biu<br/>
 
 # Init Infomation Example
-**Endpoint:https://compute.uscom-central-1.oraclecloud.com**<br />
-**Username:cloud.admin**<br />
-**Password:###########**<br />
-**Domain:gse00012384**<br />
+Endpoint:https://compute.uscom-central-1.oraclecloud.com<br />
+Username:cloud.admin<br />
+Password:###########<br />
+Domain:gse00012384<br />
 
 # You need add Oracle JDBC Driver into maven repository by your self
 mvn install:install-file -Dfile=D:/download/ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=12.1.0 -Dpackaging=jar
