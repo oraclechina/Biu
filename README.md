@@ -13,6 +13,14 @@ Notification Email: zhiqiang.x.liu@oracle.com
 List who used Biu code but don't let me know.<br/>
 Nobody for now.
 
+# Biu Blue Plan
+The current version is v2.3, the next coming version is 3.0<br/>
+v3.0 will be great release, can one click deploy Oracle RAC in OPC, OCM<br/>
+v4.0 will be fresh release, can one click deploy Nginx + 2 Node Tomcat, support SLB<br/>
+v4.5 will be integrate with <a href="https://github.com/guangleibao/jiu">Jiu</a>, support one click deploy Oracle product and opensource solution in OPC, OCM, OCI<br/>
+v5.0 will be great release, Biu will support canvas web UI, can design a solution architecture with drag and drop, like ravello.<br/>
+v6.0 will be a end release, Biu will support a mirror function, can mirror VM from AWS to Oracle Cloud.<br/>
+
 # Init Infomation Example
 #Endpoint:https://compute.uscom-central-1.oraclecloud.com<br />
 #Username:cloud.admin<br />
