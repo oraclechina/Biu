@@ -55,5 +55,5 @@ java -jar target/Biu-jar-with-dependencies.jar _en
 # Biu Plugin-ORC Live Demo Show
 ![image](https://github.com/oraclechina/Biu/blob/master/images/Biu演示2.gif)
 
-# Recommend A Best Book With Practice For Oracle Public Cloud
+# Recommend A Best Book With Practice For Oracle Cloud
 ![image](https://github.com/oraclechina/Biu/blob/master/images/book.png) - <a href="https://www.amazon.cn/dp/B075SZFSZL/ref=sr_1_1?ie=UTF8&qid=1515512395&sr=8-1&keywords=oracle+iaas+and+paas" target="_blank">Amazon Link</a>
