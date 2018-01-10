@@ -1,5 +1,6 @@
 package com.oracle.cloud.biu.api;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import com.mashape.unirest.http.JsonNode;
@@ -48,6 +49,7 @@ public class StorageAPI {
 		return node.getObject();
 	}
 	
+	
 	public static JSONObject listStorageVolumns(String path) throws Exception {
 		path = BiuUtils.kv(path, "container",
 				BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME);
@@ -66,12 +68,26 @@ public class StorageAPI {
 		log.debug(node.getObject());
 		return node.getObject();
 	}
-
+	
 	public static JSONObject createStorageBlankVolumns(String path, String size, String tags) throws Exception {
 		String storagename = "vol_" + tags + "_" + BiuUtils.getRandomString(3);
 		String jsonbody = "{  \"size\": \"" + size
 				+ "G\",  \"properties\": [\"/oracle/public/storage/latency\"], \"name\": \"" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + storagename + "\",  \"tags\": [\"" + tags + "\"]}";
 		JsonNode node = BiuUtils.rest("post", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
+		log.debug(node.getObject());
+		return node.getObject();
+	}
+
+	public static JSONObject updateStorageVolumns(String path, String name, String size, String tags) throws Exception {
+		path = BiuUtils.kv(path, "name", BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + name);
+		String newtag = "";
+		if (!StringUtils.isBlank(tags)) {
+			newtag = ",  \"tags\": [\"" + tags + "\"]";
+		}
+		String jsonbody = "{  \"size\": \"" + size
+				+ "G\",  \"properties\": [\"/oracle/public/storage/latency\"], \"description\": \"Updated Storage Volume\", \"name\": \"" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + name + "\"" + newtag + "}";
+		System.out.println(jsonbody);
+		JsonNode node = BiuUtils.rest("put", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, jsonbody);
 		log.debug(node.getObject());
 		return node.getObject();
 	}

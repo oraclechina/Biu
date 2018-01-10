@@ -17,7 +17,7 @@ public class ComputeOrchestrationEntity {
 		this._prefix = prefix;
 	}
 	
-	String computetemplate = "{\"description\":\"%description%\",\"name\":\"%finalorchname%\",\"desired_state\":\"active\",\"tags\":[\"%tenant%\"],\"objects\":[%buildssh%,%buildbootvolumn%,%builddatavolumn%,%buildipreservation%,%buildinstance%]}";
+	String computetemplate = "{\"description\":\"%description%\",\"name\":\"%finalorchname%\",\"desired_state\":\"active\",\"tags\":[\"%tenant%\"],\"objects\":[%buildssh%,%buildbootvolumn%,%buildipreservation%,%buildinstance%]}";
 	String bootstoragevolumntemplate = "{\"type\":\"StorageVolume\",\"label\":\"%bootstoragelabel%\",\"description\":\"Boot disk for your instance\",\"bootable\":true,\"persistent\":true,\"template\":{\"properties\":[\"/oracle/public/storage/latency\"],\"size\":\"%storagesize%G\",\"imagelist\":\"%bootos%\",\"name\":\"%storagename%\"}}";
 	String datastoragevolumntemplate = "{\"type\":\"StorageVolume\",\"label\":\"%datastoragelabel%\",\"description\":\"Data disk for your instance\",\"persistent\":true,\"template\":{\"properties\":[\"/oracle/public/storage/latency\"],\"size\":\"%storagesize%G\",\"name\":\"%storagename%\"}}";
 	String sshkeytemplate = "{\"type\":\"SSHKey\",\"label\":\"%sshlabel%\",\"template\":{\"enabled\":true,\"key\":\"%sshpublickey%\",\"name\":\"%sshkeyname%\"}}";
@@ -25,12 +25,13 @@ public class ComputeOrchestrationEntity {
 	String secapptemplate = "";
 	String secruletemplate = "";
 	String seclisttemplate = "";
-	String instancetemplate = "{\"type\":\"Instance\",\"description\":\"%insdesc%\",\"label\":\"%inslabel%\",\"template\":{\"label\":\"%inslabel%\",\"name\":\"%insname%\",\"shape\":\"%insshape%\",\"imagelist\":\"%insos%\",\"networking\":{\"eth0\":{\"nat\":\"ipreservation:{{%ipreservation%:name}}\"}},\"storage_attachments\":[{\"index\":1,\"volume\":\"{{%bootstoragelabel%:name}}\"},{\"index\":2,\"volume\":\"{{%datastoragelabel%:name}}\"}],\"boot_order\":[1],\"sshkeys\":[\"{{%sshlabel%:name}}\"]}}";
+//	String instancetemplate = "{\"type\":\"Instance\",\"description\":\"%insdesc%\",\"label\":\"%inslabel%\",\"template\":{\"label\":\"%inslabel%\",\"name\":\"%insname%\",\"shape\":\"%insshape%\",\"imagelist\":\"%insos%\",\"networking\":{\"eth0\":{\"nat\":\"ipreservation:{{%ipreservation%:name}}\"}},\"storage_attachments\":[{\"index\":1,\"volume\":\"{{%bootstoragelabel%:name}}\"},{\"index\":2,\"volume\":\"{{%datastoragelabel%:name}}\"}],\"boot_order\":[1],\"sshkeys\":[\"{{%sshlabel%:name}}\"]}}";
+	String instancetemplate = "{\"type\":\"Instance\",\"description\":\"%insdesc%\",\"label\":\"%inslabel%\",\"template\":{\"label\":\"%inslabel%\",\"name\":\"%insname%\",\"shape\":\"%insshape%\",\"imagelist\":\"%insos%\",\"networking\":{\"eth0\":{\"nat\":\"ipreservation:{{%ipreservation%:name}}\"}},\"storage_attachments\":[{\"index\":1,\"volume\":\"{{%bootstoragelabel%:name}}\"}],\"boot_order\":[1],\"sshkeys\":[\"{{%sshlabel%:name}}\"]}}";
 	
 	public String build(String tenant, String subtenant, String insdesc, String inslabel, String insname, String description, String finalorchname, String insshape, String insos, String sshlabel, String sshpublickey, String sshkeyname, String bootstoragelabel, String bootstoragename, String bootstoragesize, String bootos, String datastoragelabel, String datastoragesize, String datastoragename, String ipreservation, String ipreservationname) {
 		buildSSH(sshlabel, sshpublickey, sshkeyname);
 		buildBootStorageVolumn(bootstoragelabel, bootstoragename, bootstoragesize, bootos);
-		buildDataStorageVolumn(datastoragelabel, datastoragesize, datastoragename);
+//		buildDataStorageVolumn(datastoragelabel, datastoragesize, datastoragename);
 		buildIPReservation(ipreservation, ipreservationname);
 		buildInstance(insdesc, inslabel, insname, insshape, insos, ipreservation, bootstoragelabel, datastoragelabel, sshlabel);
 		computetemplate = computetemplate.replaceAll("%finalorchname%", _prefix + finalorchname);
@@ -38,7 +39,7 @@ public class ComputeOrchestrationEntity {
 		computetemplate = computetemplate.replaceAll("%tenant%", tenant);
 		computetemplate = computetemplate.replaceAll("%buildssh%", sshkeytemplate);
 		computetemplate = computetemplate.replaceAll("%buildbootvolumn%", bootstoragevolumntemplate);
-		computetemplate = computetemplate.replaceAll("%builddatavolumn%", datastoragevolumntemplate);
+//		computetemplate = computetemplate.replaceAll("%builddatavolumn%", datastoragevolumntemplate);
 		computetemplate = computetemplate.replaceAll("%buildipreservation%", ipreservationtemplate);
 		computetemplate = computetemplate.replaceAll("%buildinstance%", instancetemplate);
 //		computetemplate = computetemplate.replaceAll("%buildsecapp%", secapptemplate);

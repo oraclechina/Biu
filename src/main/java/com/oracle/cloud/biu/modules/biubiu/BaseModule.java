@@ -44,5 +44,5 @@ public abstract class BaseModule extends Thread {
 	
 	public abstract boolean bomb(String orchid);
 	
-	protected abstract void nuke(String orchid);
+	public abstract boolean bomb(String orchid, boolean isall);
 }

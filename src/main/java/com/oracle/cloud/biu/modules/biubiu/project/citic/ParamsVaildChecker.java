@@ -177,7 +177,7 @@ public class ParamsVaildChecker {
 			sp.setDescription("不在系统优先供应配置列表中");
 			return sp;
 		}
-		OracleOrchDatabaseAutoDeploy db = new OracleOrchDatabaseAutoDeploy(String.valueOf(volumnsize));
+		OracleOrchDatabaseAutoDeploy db = new OracleOrchDatabaseAutoDeploy(null, String.valueOf(volumnsize));
 		try {
 			boolean _re = db.checkingSystemQuota(shape);
 			if (!_re) {

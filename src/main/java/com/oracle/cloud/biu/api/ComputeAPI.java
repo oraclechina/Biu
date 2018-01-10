@@ -56,6 +56,13 @@ public class ComputeAPI {
 		return node.getObject();
 	}
 	
+	public static JSONObject listOrchestrationComputes(String path) throws Exception {
+		path = BiuUtils.kv(path, "container", BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/");
+		JsonNode node = BiuUtils.rest("get", BasicAuthenticationAPI.ACCEPT_COMPUTE, path);
+		log.debug(node.getObject());
+		return node.getObject();
+	}
+	
 	public static JSONObject createComputeInstanceOrchestration(String path, String label, String shape, String imagelist, String bootstoragesize, String datastoragesize, String keyname, String tags)  throws Exception {
 		ComputeOrchestrationEntity coEntity = new ComputeOrchestrationEntity(BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/");
 		String publickey = "";
@@ -68,14 +75,19 @@ public class ComputeAPI {
 		return node.getObject();
 	}
 	
+	public static JSONObject viewOrchestrationComputes(String path, String name) throws Exception {
+		path = BiuUtils.kv(path, "name", BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + name);
+		log.debug(path);
+		JsonNode node = BiuUtils.rest("get", BasicAuthenticationAPI.ACCEPT_COMPUTE, path);
+		log.debug(node.getObject());
+		return node.getObject();
+	}	
+	
 	public static JSONObject deleteComputeInstanceOrchestration(String path, String instanceName) throws Exception {
-		path = BiuUtils.kv(path, "name", BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + instanceName);
+		path = BiuUtils.kv(path, "name", BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + instanceName + "?terminate=true");
 		log.debug(path);
 		int retcode = BiuUtils.rest("delete", BasicAuthenticationAPI.ACCEPT_COMPUTE, path, true);
-		if (retcode == 204)
-			return BiuUtils.getSucReturn("deleteComputeInstanceOrchestration");
-		else
-			return BiuUtils.getErrReturn("deleteComputeInstanceOrchestration", String.valueOf(retcode));
+		return BiuUtils.getSucReturn(String.valueOf(retcode));
 	}
 	
 	public static JSONObject deleteComputeInstance(String path, String instanceName) throws Exception {

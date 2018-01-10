@@ -34,6 +34,7 @@ import com.oracle.cloud.biu.utils.BiuUtils;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
+//Deprecated
 public class OracleDatabaseAutoDeploy extends BaseModule {
 
 	private static final int RETRY = 10;
@@ -821,11 +822,6 @@ public class OracleDatabaseAutoDeploy extends BaseModule {
 
 	@Override
 	public RespEntity rollback(XTransaction xtranc) {
-		String sid = "";
-		List<XEvent> events = xtranc.getEvents();
-		for (XEvent xEvent : events) {
-			
-		}
 		return null;
 	}
 
@@ -835,8 +831,8 @@ public class OracleDatabaseAutoDeploy extends BaseModule {
 	}
 
 	@Override
-	public void nuke(String orchid) {
-		
+	public boolean bomb(String orchid, boolean isall) {
+		return false;
 	}
 
 }

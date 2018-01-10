@@ -381,6 +381,48 @@
 				            "prompt" : "input"
 		            	}		            	
 		            ]
+	            },	            
+				{
+					"name": "ComputeAPI-deleteComputeInstance",
+					"endpoint": "/instance/{name}",
+		            "desc": "删除计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmcomputeinsname",
+							"endpoint": "input",
+				            "desc": "请输入要删除的计算唯一实例名",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
+	            },
+	            {
+					"name": "ComputeAPI-listOrchestrationComputes",
+					"endpoint": "/platform/v1/orchestration/{container}/",
+		            "desc": "列出编排计算实例",
+		            "prompt" : "show",
+		            "subcommand" : [
+		            	{
+		            		"name": "showorchcomputeinss",
+							"endpoint": "show",
+				            "desc": "当前所有已创建的编排计算实例",
+				            "prompt" : "show"
+		            	}
+		            ]
+	            },	            
+				{
+					"name": "ComputeAPI-viewOrchestrationComputes",
+					"endpoint": "/platform/v1/orchestration/{name}",
+		            "desc": "查看编排计算实例",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "vieworchcomputeins",
+							"endpoint": "input",
+				            "desc": "请输入唯一编排名",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
 	            },
 				{
 					"name": "ComputeAPI-createComputeInstanceOrchestration",
@@ -415,7 +457,7 @@
 						{
 		            		"name": "2crtcomputeinsdatapk",
 							"endpoint": "input",
-				            "desc": "请输入启动数据卷大小(单位G)",
+				            "desc": "请输入数据卷大小(单位G)",
 				            "prompt" : "input"
 		            	},
 						{
@@ -433,15 +475,15 @@
 		            ]
 	            },	            
 				{
-					"name": "ComputeAPI-deleteComputeInstance",
-					"endpoint": "/instance/{name}",
-		            "desc": "删除计算实例",
+					"name": "ComputeAPI-deleteComputeInstanceOrchestration",
+					"endpoint": "/platform/v1/orchestration/{name}",
+		            "desc": "删除编排计算实例",
 		            "prompt" : "input",
 		            "subcommand" : [
 		            	{
-		            		"name": "rmcomputeinsname",
+		            		"name": "rmcomputeorchinsname",
 							"endpoint": "input",
-				            "desc": "请输入要删除的计算唯一实例名",
+				            "desc": "请输入要删除的计算唯一编排名",
 				            "prompt" : "input"
 		            	}	            	
 		            ]
@@ -579,7 +621,7 @@
 		            	{
 		            		"name": "storageblanksize",
 							"endpoint": "input",
-				            "desc": "请直接输入要创建的存储盘大小数值, 单位默认G",
+				            "desc": "请直接输入要创建的存储盘大小数值, 单位默认G, 封顶2000G",
 				            "prompt" : "input"
 		            	},
 		            	{
@@ -642,6 +684,32 @@
 				            "desc": "请输入要解除关系的Attachment Name，可以通过查看存储卷获得",
 				            "prompt" : "input"
 		            	}
+		            ]
+	            },
+	            {
+					"name": "StorageAPI-updateStorageVolumns",
+					"endpoint": "/storage/volume/{name}",
+		            "desc": "扩容存储空间",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "upsizestoragevolname",
+							"endpoint": "input",
+				            "desc": "请输入存储卷名称",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "upsizestoragesize",
+							"endpoint": "input",
+				            "desc": "请直接输入扩容后存储盘大小数值, 单位默认G, 封顶2000G",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "upsizestoragetenant",
+							"endpoint": "input",
+				            "desc": "请输入新的租户名，如不改变租户请不输入任何值",
+				            "prompt" : "input"
+		            	}      	
 		            ]
 	            }
             ]
@@ -850,7 +918,7 @@
             "desc": "BiuBiu",
             "prompt" : "list",
 			"subcommand" : [
-			{
+				{
 					"name": "BiuBiuAPI-queryTransactionStatus",
 					"endpoint": "/biubiu/",
 		            "desc": "查询事务运行状态",
@@ -863,7 +931,7 @@
 				            "prompt" : "input"
 		            	}
 		            ]
-	            },			
+	            },	            		
 				{
 					"name": "BiuBiuAPI-createOracleDatabase11gR2AutoDeploy",
 					"endpoint": "/biubiu/",
@@ -910,6 +978,12 @@
 		            		"name": "biubiu_2_pk",
 							"endpoint": "input",
 				            "desc": "sshkey私钥",
+				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_2_cid",
+							"endpoint": "input",
+				            "desc": "备份容器id",
 				            "prompt" : "input"
 		            	}
 		            ]
@@ -961,7 +1035,27 @@
 							"endpoint": "input",
 				            "desc": "sshkey私钥",
 				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_1_cid",
+							"endpoint": "input",
+				            "desc": "备份容器id",
+				            "prompt" : "input"
 		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-bombOracleDatabase",
+					"endpoint": "/biubiu/",
+		            "desc": "一键删除Oracle数据库部署计划",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_4_orchname",
+							"endpoint": "input",
+				            "desc": "请输入编排计划名",
+				            "prompt" : "input"
+		            	}	            	
 		            ]
 	            },	            
 				{

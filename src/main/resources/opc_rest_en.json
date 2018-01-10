@@ -343,6 +343,20 @@
 				            "prompt" : "input"
 		            	}
 		            ]
+	            },	            
+				{
+					"name": "ComputeAPI-viewOrchestrationComputes",
+					"endpoint": "/platform/v1/orchestration/{name}",
+		            "desc": "View Orchestration Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "vieworchcomputeins",
+							"endpoint": "input",
+				            "desc": "Please Input Orchestration Name",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
 	            },
 				{
 					"name": "ComputeAPI-createComputeInstance",
@@ -395,7 +409,139 @@
 				            "prompt" : "input"
 		            	}	            	
 		            ]
-	            }	                        
+	            },
+				{
+					"name": "ComputeAPI-createComputeInstanceOrchestration",
+					"endpoint": "/platform/v1/orchestration/",
+		            "desc": "Create Orchestration Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "2crtorchcomputeinsname",
+							"endpoint": "input",
+				            "desc": "Please Input The Compute Instance Name",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtorchcomputeinsshape",
+							"endpoint": "input",
+				            "desc": "Please Input Compute Instance Shape",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "2crtorchcomputeinsos",
+							"endpoint": "input",
+				            "desc": "Please Input Compute Instance OS",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtorchcomputeinsbootpk",
+							"endpoint": "input",
+				            "desc": "Please Inpute The Boot Volumn Size(Unit G)",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtorchcomputeinsdatapk",
+							"endpoint": "input",
+				            "desc": "Please Input The Data Volumn Size(Unit G)",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtorchcomputeinssshpk",
+							"endpoint": "input",
+				            "desc": "Please Input The SSH Public Key Name",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "2crtorchcomputeinstenant",
+							"endpoint": "input",
+				            "desc": "Please Input The Root Tenant Name",
+				            "prompt" : "input"
+		            	}	
+		            ]
+	            },	            
+				{
+					"name": "ComputeAPI-deleteComputeInstanceOrchestration",
+					"endpoint": "/platform/v1/orchestration/{name}",
+		            "desc": "Delete Orchestration Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "rmcomputeorchinsname",
+							"endpoint": "input",
+				            "desc": "Please Input Delete Orchestration Name",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-startCompute",
+					"endpoint": "/instance/{name}",
+		            "desc": "Start Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "startcomputeinsname",
+							"endpoint": "input",
+				            "desc": "Please Input Start Compute Instance Name",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-stopCompute",
+					"endpoint": "/instance/{name}",
+		            "desc": "Stop Compute Instance",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "stopcomputeinsname",
+							"endpoint": "input",
+				            "desc": "Please Input Stop Compute Instance Name",
+				            "prompt" : "input"
+		            	}	            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-changeComputeTenant",
+					"endpoint": "/instance/{name}",
+		            "desc": "Change Compute Instance Tenant",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "chtcomputeinsname",
+							"endpoint": "input",
+				            "desc": "Please Input Compute Instance Name",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "chttenantname",
+							"endpoint": "input",
+				            "desc": "Please Input The New Root Tenant Name",
+				            "prompt" : "input"
+		            	}		            	
+		            ]
+	            },
+				{
+					"name": "ComputeAPI-changeComputeShape",
+					"endpoint": "/instance/{name}",
+		            "desc": "Change Compute Instance Shape",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "chtcomputeinsname",
+							"endpoint": "input",
+				            "desc": "Please Input The Compute Instance Name",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "chtnewshape",
+							"endpoint": "input",
+				            "desc": "Please Input The New Shape",
+				            "prompt" : "input"
+		            	}			            		            	
+		            ]
+	            }	            	                        
 	    	]
         },
         {
@@ -741,43 +887,49 @@
 		            	{
 		            		"name": "biubiu_2_sshkeyname",
 							"endpoint": "input",
-				            "desc": "创建资源使用已有的SshKey名称",
+				            "desc": "ssh key name in system",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_2_sshkeycontent",
 							"endpoint": "input",
-				            "desc": "如果系统没有sshkey需要创建时，需要传递的sshkey公钥内容",
+				            "desc": "ssh public key",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_2_insname",
 							"endpoint": "input",
-				            "desc": "计算实例名称",
+				            "desc": "instance name",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_2_shape",
 							"endpoint": "input",
-				            "desc": "计算实例型号",
+				            "desc": "instance shape",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_2_os",
 							"endpoint": "input",
-				            "desc": "实例操作系统",
+				            "desc": "operation system full name",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_2_tenant",
 							"endpoint": "input",
-				            "desc": "租户名称",
+				            "desc": "tenant",
 				            "prompt" : "input"
 		            	},		            	
 		            	{
 		            		"name": "biubiu_2_pk",
 							"endpoint": "input",
-				            "desc": "sshkey私钥",
+				            "desc": "sshkey private key",
+				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_2_cid",
+							"endpoint": "input",
+				            "desc": "backup container id",
 				            "prompt" : "input"
 		            	}
 		            ]
@@ -791,43 +943,49 @@
 		            	{
 		            		"name": "biubiu_1_sshkeyname",
 							"endpoint": "input",
-				            "desc": "创建资源使用已有的SshKey名称",
+				            "desc": "ssh key name in system",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_1_sshkeycontent",
 							"endpoint": "input",
-				            "desc": "如果系统没有sshkey需要创建时，需要传递的sshkey公钥内容",
+				            "desc": "ssh public key content",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_1_insname",
 							"endpoint": "input",
-				            "desc": "计算实例名称",
+				            "desc": "instance name",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_1_shape",
 							"endpoint": "input",
-				            "desc": "计算实例型号",
+				            "desc": "instance shape",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_1_os",
 							"endpoint": "input",
-				            "desc": "实例操作系统",
+				            "desc": "operation system full name",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "biubiu_1_tenant",
 							"endpoint": "input",
-				            "desc": "租户名称",
+				            "desc": "tenant name",
 				            "prompt" : "input"
 		            	},		            	
 		            	{
 		            		"name": "biubiu_1_pk",
 							"endpoint": "input",
-				            "desc": "sshkey私钥",
+				            "desc": "ssh private key content",
+				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_1_cid",
+							"endpoint": "input",
+				            "desc": "backup container id",
 				            "prompt" : "input"
 		            	}
 		            ]

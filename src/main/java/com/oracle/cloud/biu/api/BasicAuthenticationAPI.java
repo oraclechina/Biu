@@ -3,6 +3,7 @@ package com.oracle.cloud.biu.api;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.thoughtworks.xstream.XStream;
 
 import lombok.extern.log4j.Log4j;
 
@@ -36,10 +37,19 @@ public class BasicAuthenticationAPI {
 	}
 	
 	public static void login(String path) throws Exception {
+		log.debug("===========Rest Endpoint========");
+		log.debug("[POST]--->" + ENDPOINT + path);
+		log.debug("[HEAD]--->" + CONTENT_TYPE);
+		log.debug("[---AUTH]--->" + CLOUD_UNDOMAIN + "/" + CLOUD_USERNAME);
+		log.debug("[---PSWD]--->" + CLOUD_PASSWORD);
+		log.debug("[BODY]--->" + "{ \"password\": \"" + CLOUD_PASSWORD + "\", \"user\": \"" + CLOUD_UNDOMAIN + "/" + CLOUD_USERNAME + "\"}");
 		HttpResponse<JsonNode> hr = Unirest.post(ENDPOINT + path).header("Accept", ACCEPT_COMPUTE)
 				.header("Content-Type", CONTENT_TYPE).basicAuth("/" + CLOUD_UNDOMAIN + "/" + CLOUD_USERNAME, CLOUD_PASSWORD)
 				.body("{ \"password\": \"" + CLOUD_PASSWORD + "\", \"user\": \"" + CLOUD_UNDOMAIN + "/" + CLOUD_USERNAME + "\"}").asJson();
+		log.debug("[RESP]<---" + hr);
+		log.debug("[DETL]<---" + new XStream().toXML(hr));
 		COOKIE = hr.getHeaders().getFirst("Set-Cookie");
+		log.debug("[COOK]<---" + COOKIE);
 	}
 
 }

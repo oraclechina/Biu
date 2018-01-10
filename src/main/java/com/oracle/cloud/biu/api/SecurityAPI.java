@@ -87,8 +87,8 @@ public class SecurityAPI {
 		return BiuUtils.getSucReturn("Security");
 	}
 	
-	public static JSONObject deleteSecRule(String path, String keyname) throws Exception {
-		path = BiuUtils.kv(path, "name", BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + keyname);
+	public static JSONObject deleteSecRule(String path, String name) throws Exception {
+		path = BiuUtils.kv(path, "name", BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/" + name);
 		log.debug(path);
 		BiuUtils.rest("delete", BasicAuthenticationAPI.ACCEPT_COMPUTE, path);
 		return BiuUtils.getSucReturn("Security");

@@ -38,6 +38,7 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 
 	private static final int RETRY = 10;
 
+	String runnableMode = "deploy";
 	String plugin = "false";
 	String sshkeyname = "";
 	String sshkeycontent = "";
@@ -56,14 +57,27 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 	String emport = "";
 	String price1hour = "";
 	String autobackup = "false";
-	String bootstoragesize = "50";
+	String bootstoragesize = "";
 	String orchid = "";
 	String citicinstanceid = "";
+	
+	public OracleOrchDatabaseAutoDeploy() {
+	}
 
-	public OracleOrchDatabaseAutoDeploy(String volumnsize) {
+	public OracleOrchDatabaseAutoDeploy(String orchid, String volumnsize) {
+		this.orchid = orchid;
 		this.volumnsize = volumnsize;
 	}
 	
+	
+	public String getRunnableMode() {
+		return runnableMode;
+	}
+
+	public void setRunnableMode(String runnableMode) {
+		this.runnableMode = runnableMode;
+	}
+
 	public OracleOrchDatabaseAutoDeploy(String... params) {
 		sshkeyname = params[0];
 		sshkeycontent = params[1];
@@ -160,7 +174,7 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 			desc.setXstatus("正在创建计划任务");
 			desc.setXmessage("processing");
 			Biu_CITIC_SDK.xmap.put(xid, desc);
-			JSONObject obj2 = ComputeAPI.createComputeInstanceOrchestration(m.get("createorchcompute"), insname, shape, os, bootstoragesize, volumnsize, sshkeyname, tenant);
+			JSONObject obj2 = ComputeAPI.createComputeInstanceOrchestration(m.get("createorchcompute"), insname, shape, os, volumnsize, volumnsize, sshkeyname, tenant);
 			orchid = obj2.optString("orchid");
 			if (!StringUtils.isBlank(orchid)) {
 				desc.setOrchid(orchid);
@@ -222,8 +236,9 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 			desc.setXstatus("已创建安全组");
 			desc.setXmessage("processing");
 			Biu_CITIC_SDK.xmap.put(xid, desc);
-			xtranc.getEvents().add(new XEvent("secgroup", jsonseclist.getString("name")));
-
+			xtranc.getEvents().add(new XEvent("secrule", tenant + "_secrule_" + insname));
+			xtranc.getEvents().add(new XEvent("secgroup", tenant + "_seclist_" + insname));
+			
 			// 创建安全规则
 			log.info("[Process] Creating Security Rule:" + tenant + "_secrule_" + insname);
 			JSONObject jsonsecrule = SecurityAPI.createSecRule(m.get("createsecrule"), tenant + "_secrule_" + insname,
@@ -233,7 +248,6 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 			desc.setXstatus("已创建安全规则");
 			desc.setXmessage("processing");
 			Biu_CITIC_SDK.xmap.put(xid, desc);
-			xtranc.getEvents().add(new XEvent("secrule", jsonsecrule.getString("name")));
 
 			// 绑定安全组到计算实例
 			log.info("[Process] Binding Security List:" + tenant + "_seclist_" + insname + " To " + insname);
@@ -439,7 +453,11 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 
 	@Override
 	public void run() {
-		deploy();
+		if (runnableMode.equals("deploy"))
+			deploy();
+		else if(runnableMode.equals("bomb")) {
+			bomb(orchid, true);
+		}
 	}
 
 	private void buildResp(String xid, Biu_CITIC_SDK_Desc desc, String insname, String publicip, String privateip,
@@ -454,7 +472,7 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 		desc.setPubip(publicip);
 		if (dbversion.equals("OracleDatabase12cR1")) {
 			dbconsoleurl = "https://<public_ip>:5500/em";
-		} else {
+		} else if(dbversion.equals("OracleDatabase11gR2")) {
 			dbconsoleurl = "http://<public_ip>:1158/em";
 		}
 		dbconsoleurl = dbconsoleurl.replaceAll("<public_ip>", publicip);
@@ -474,16 +492,16 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 			ap.exec("curl -O https://em2.storage.oraclecloud.com/v1/Storage-gse00002004/shared/database/scripts/DB12cR1/vm_init_db12cR1_BiuBiu.sh");
 			ap.exec("chmod +x ./vm_init_db12cR1_BiuBiu.sh");
 			exitValue = ap.exec("sudo sh /home/opc/vm_init_db12cR1_BiuBiu.sh " + dbpassword + " 1521 "
-					+ charset + " " + dbsid + " " + "5500");
+					+ charset + " " + dbsid + " " + "5500" + " " + citicinstanceid);
 			// exitCode = shell.exec("sudo sh
 			// /home/opc/vm_init_db12cR1_BiuBiu.sh " + dbpassword + " " +
 			// dblistenport + " " + charset + " " + dbsid + " " + emport,
 			// System.in, System.out, System.err);
-		} else {
+		} else if (dbversion.equals("OracleDatabase11gR2")){
 			ap.exec("curl -O https://em2.storage.oraclecloud.com/v1/Storage-gse00002004/shared/database/scripts/DB11gR2/vm_init_db11gR2_BiuBiu.sh");
 			ap.exec("chmod +x ./vm_init_db11gR2_BiuBiu.sh");
 			exitValue = ap.exec("sudo sh /home/opc/vm_init_db11gR2_BiuBiu.sh " + dbpassword + " 1521 "
-					+ charset + " " + dbsid + " " + "1521");
+					+ charset + " " + dbsid + " " + "1158" + " " + citicinstanceid);
 			// exitCode = shell.exec("sudo sh
 			// /home/opc/vm_init_db11gR2_BiuBiu.sh " + dbpassword + " " +
 			// dblistenport + " " + charset + " " + dbsid + " " + emport,
@@ -621,44 +639,197 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 	@Override
 	public RespEntity rollback(XTransaction xtranc) {
 		List<XEvent> events = xtranc.getEvents();
-		for (XEvent xEvent : events) {
-			if ("orchestration".equals(xEvent.getType())) {
-				try {
-					JSONObject jsonobj = ComputeAPI.deleteComputeInstanceOrchestration(m.get("deleteorchcompute"), xEvent.getSid());
-					if (null != jsonobj) {
-						String biureturn = jsonobj.optString("biureturn");
-						if ("204".equals(biureturn)) {
-							log.info("[Process][Rollback Successful]sid=" + xEvent.getSid());
-						} else {
-							log.error("[Process][Rollback Failed]sid=" + xEvent.getSid());
-							log.info("[Process][Rollback Start to try Bomb]sid=" + xEvent.getSid());
-							Thread.sleep(1000 * 30);
-							boolean _ret = bomb(xEvent.getSid());
-							if (!_ret) {
-								log.error("[Process][Rollback Bomb Failed]sid=" + xEvent.getSid());
-								Thread.sleep(1000 * 30);
-								nuke(xEvent.getSid());
-								log.error("[Process][Rollback Nuke Failed]sid=" + xEvent.getSid());
-							}
-							log.info("[Process][Rollback Failed]sid=" + xEvent.getSid());
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+		try {
+			for (XEvent xEvent : events) {
+				log.info("[Process] Start to Roll Back:" + xEvent.getType());
+				if ("orchestration".equals(xEvent.getType())) {
+					bomb(xEvent.getSid());
+				} else if("secrule".equals(xEvent.getType())) {
+					SecurityAPI.deleteSecRule(m.get("deletesecrule"), tenant + "_secrule_" + insname);
+					Thread.sleep(1000 * 30);
+				} else if("secgroup".equals(xEvent.getType())) {
+					SecurityAPI.deleteSecList(m.get("deletesecgroup"), tenant + "_secgroup_" + insname);
+					Thread.sleep(1000 * 30);
 				}
+				log.info("[Process] " + xEvent.getType() + " has been roll backed");
 			}
+			log.info("[Process] Roll Back All Done");
+		} catch (Exception e) {
+			log.error("[Process][Rollback Has Exception]Message=" + e.getMessage());
 		}
 		return null;
 	}
 
 	@Override
-	public boolean bomb(String orchid) {
+	public boolean bomb(String orchid, boolean isall) {
+		boolean bombStatus = false;
+		try {
+			if (m == null)
+				loadM();
+			if (!StringUtils.isBlank(orchid)) {
+				String[] array = orchid.split("_");
+				tenant = array[0];
+				insname = array[2];
+			}
+			JSONObject jsonobj = ComputeAPI.deleteComputeInstanceOrchestration(m.get("deleteorchcompute"), orchid);
+			if (null != jsonobj) {
+				String biureturn = jsonobj.optString("biureturn");
+				log.debug("biureturn=" + biureturn);
+				if ("204".equals(biureturn)) {
+					log.info("[Process][Rollback Successful]sid=" + orchid);
+					int times = 0;
+					do {
+						bombStatus = checkBombStatus(orchid);
+						times ++;
+						Thread.sleep(1000 * 30);
+					} while ((!bombStatus) && (times < RETRY));
+					Thread.sleep(1000 * 30);
+					SecurityAPI.deleteSecRule(m.get("deletesecrule"), tenant + "_secrule_" + insname);
+					Thread.sleep(1000 * 30);
+					SecurityAPI.deleteSecList(m.get("deletesecgroup"), tenant + "_seclist_" + insname);
+					boolean secstatus = checkSecurityStatus(tenant, insname);
+					if (!secstatus)
+						bomb(orchid);
+				} else {
+					log.error("[Process][Rollback Bomb Failed]sid=" + orchid);
+					log.info("[Process][Rollback Start to try Nuke]sid=" + orchid);
+					Thread.sleep(1000 * 30);
+					nuke(false, orchid, tenant, insname);
+					log.error("[Process][Rollback Nuke Successful]sid=" + orchid);
+					bombStatus = true;
+				}
+			} else {
+				log.error("[Process][Wrong Params]orchid=" + orchid);
+				log.error("[Process][Wrong Params]tenant=" + tenant);
+				log.error("[Process][Wrong Params]instancename=" + insname);
+			}
+		}catch (Exception e) {
+			log.error("[Process][Rollback Has Exception]sid=" + orchid);
+			log.error("[Process][Rollback Has Exception]Message=" + e.getMessage());
+		}
+		return bombStatus;
+	}
+	
+	private boolean checkSecurityStatus() throws Exception {
+		if (null == m)
+			loadM();
+		JSONObject obj1 = SecurityAPI.listSecRule(m.get("listsecrule"));
+		if (null != obj1) {
+			JSONArray jsona = obj1.optJSONArray("result");
+			if ((null != jsona) && (jsona.length() > 0)) {
+				for (Object object : jsona) {
+					String secrulename = (String) object;
+					String realsecrulename = BiuUtils.kvNULL(secrulename, BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/");
+					if (realsecrulename.equals(tenant + "_secrule_" + insname))
+						return false;
+				}
+			}
+		}
+		obj1 = SecurityAPI.listSecList(m.get("listsecgroup"));
+		if (null != obj1) {
+			JSONArray jsona = obj1.optJSONArray("result");
+			if ((null != jsona) && (jsona.length() > 0)) {
+				for (Object object : jsona) {
+					String secgroupname = (String) object;
+					String realsecgroupname = BiuUtils.kvNULL(secgroupname, BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/");
+					if (realsecgroupname.equals(tenant + "_secgroup_" + insname))
+						return false;
+				}
+			}
+		}		
+		return true;
+	}
+	
+	private boolean checkSecurityStatus(String tenant, String instancename) throws Exception {
+		if (null == m)
+			loadM();
+		JSONObject obj1 = SecurityAPI.listSecRule(m.get("listsecrule"));
+		if (null != obj1) {
+			JSONArray jsona = obj1.optJSONArray("result");
+			if ((null != jsona) && (jsona.length() > 0)) {
+				for (Object object : jsona) {
+					String secrulename = (String) object;
+					String realsecrulename = BiuUtils.kvNULL(secrulename, BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/");
+					if (realsecrulename.equals(tenant + "_secrule_" + insname))
+						return false;
+				}
+			}
+		}
+		obj1 = SecurityAPI.listSecList(m.get("listsecgroup"));
+		if (null != obj1) {
+			JSONArray jsona = obj1.optJSONArray("result");
+			if ((null != jsona) && (jsona.length() > 0)) {
+				for (Object object : jsona) {
+					String secgroupname = (String) object;
+					String realsecgroupname = BiuUtils.kvNULL(secgroupname, BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/");
+					if (realsecgroupname.equals(tenant + "_secgroup_" + insname))
+						return false;
+				}
+			}
+		}		
+		return true;
+	}
+
+	private boolean checkBombStatus(String orchid2) throws Exception {
+		if (null == m)
+			loadM();
+		JSONObject obj1 = ComputeAPI.viewOrchestrationComputes(m.get("vieworchcompute"), orchid2);
+		if (null != obj1) {
+			String message = obj1.optString("message");
+			if (!StringUtils.isBlank(message)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
+	private void nuke(boolean bombStatus, String orchid, String tenant, String insname) throws Exception {
+		if (bombStatus)
+			return;
+		int times = 0;
+		do {
+			bombStatus = checkBombStatus(orchid);
+			times ++;
+		} while ((!bombStatus) && (times < RETRY));
+		Thread.sleep(1000 * 30);
+		SecurityAPI.deleteSecRule(m.get("deletesecrule"), tenant + "_secrule_" + insname);
+		Thread.sleep(1000 * 30);
+		SecurityAPI.deleteSecList(m.get("deletesecgroup"), tenant + "_seclist_" + insname);
+		
+		if (!bombStatus)
+			nuke(bombStatus, orchid, tenant, insname);
+	}
+
 	@Override
-	protected void nuke(String orchid) {
-		//execute nuke
+	public boolean bomb(String orchid) {
+		boolean bombStatus = false;
+		try {
+			JSONObject jsonobj = ComputeAPI.deleteComputeInstanceOrchestration(m.get("deleteorchcompute"), orchid);
+			if (null != jsonobj) {
+				String biureturn = jsonobj.optString("biureturn");
+				if ("204".equals(biureturn)) {
+					log.info("[Process][Rollback Successful]sid=" + orchid);
+					int times = 0;
+					do {
+						bombStatus = checkBombStatus(orchid);
+						times ++;
+						Thread.sleep(1000 * 120);
+						bomb(orchid);
+					} while ((!bombStatus) && (times < RETRY));
+				} else {
+					log.error("[Process][Rollback Bomb Failed]sid=" + orchid);
+					log.info("[Process][Rollback Start to try Nuke]sid=" + orchid);
+					Thread.sleep(1000 * 30);
+					nuke(false, orchid, tenant, insname);
+					log.error("[Process][Rollback Nuke Successful]sid=" + orchid);
+					bombStatus = true;
+				}
+			}
+		}catch (Exception e) {
+			log.error("[Process][Rollback Has Exception]sid=" + orchid);
+			log.error("[Process][Rollback Has Exception]Message=" + e.getMessage());
+		}
+		return bombStatus;
 	}
 
 }

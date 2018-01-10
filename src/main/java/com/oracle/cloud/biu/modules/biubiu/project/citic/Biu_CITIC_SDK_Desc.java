@@ -32,7 +32,7 @@ public class Biu_CITIC_SDK_Desc {
 	//事务接受时间
 	private Date xdate = new Date();
 	//事务执行完预估时间（分钟）
-	private Integer xestimatetime = 19;
+	private Integer xestimatetime = 24;
 	//事务预估剩余执行时间(分钟)
 	private Integer xremaintime = xestimatetime;
 	//编排计划ID
