@@ -1,4 +1,4 @@
-package com.oracle.cloud.biu.modules.biubiu.project.citic;
+package com.oracle.cloud.biu.modules.biubiu.citic;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j;

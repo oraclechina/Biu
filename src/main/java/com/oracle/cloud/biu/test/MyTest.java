@@ -8,8 +8,8 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 import com.oracle.cloud.biu.Biu;
-import com.oracle.cloud.biu.modules.biubiu.project.citic.ParamsVaildChecker;
-import com.oracle.cloud.biu.modules.biubiu.project.citic.ServiceParams;
+import com.oracle.cloud.biu.modules.biubiu.citic.ParamsVaildChecker;
+import com.oracle.cloud.biu.modules.biubiu.citic.ServiceParams;
 
 public class MyTest {
 	

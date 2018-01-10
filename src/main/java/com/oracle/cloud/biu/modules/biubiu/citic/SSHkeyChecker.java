@@ -1,4 +1,4 @@
-package com.oracle.cloud.biu.modules.biubiu.project.citic;
+package com.oracle.cloud.biu.modules.biubiu.citic;
 
 public class SSHkeyChecker {
 

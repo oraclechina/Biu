@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 
-import com.oracle.cloud.biu.modules.biubiu.project.citic.Biu_CITIC_SDK;
-import com.oracle.cloud.biu.modules.biubiu.project.citic.Biu_CITIC_SDK_Desc;
+import com.oracle.cloud.biu.modules.biubiu.citic.Biu_CITIC_SDK;
+import com.oracle.cloud.biu.modules.biubiu.citic.Biu_CITIC_SDK_Desc;
 import com.oracle.cloud.biu.modules.biubiu.shell.OracleDatabaseAutoDeploy;
 import com.oracle.cloud.biu.modules.biubiu.shell.OracleOrchDatabaseAutoDeploy;
 import com.oracle.cloud.biu.utils.BiuUtils;

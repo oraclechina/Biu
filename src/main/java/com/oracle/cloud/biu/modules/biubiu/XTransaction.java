@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.oracle.cloud.biu.modules.biubiu.project.citic.Biu_CITIC_SDK_Desc;
+import com.oracle.cloud.biu.modules.biubiu.citic.Biu_CITIC_SDK_Desc;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
