@@ -42,7 +42,7 @@ Biu.BIUPROFILE = "D:/project/Biu-orc/src/main/lib/biuaccount";<br/>
 Biu.main(new String[] { "_cn", "plugin" });<br/>     
 
 # You need add Oracle JDBC Driver into maven repository by your self
-mvn install:install-file -Dfile=D:/download/ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=12.1.0 -Dpackaging=jar
+mvn install:install-file -Dfile=D:/download/ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=12.1.0 -Dpackaging=jar<br/>
 mvn install:install-file -Dfile=D:/download/oracle.cloud.storage.api-13.2.8.jar -DgroupId=com.oracle.cloud -DartifactId=storagesdk -Dversion=13.2.8 -Dpackaging=jar
 
 # Language
