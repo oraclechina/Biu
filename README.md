@@ -20,7 +20,7 @@ Nobody for now.
 **Oracle China SCC Team**<br />
 
 # Biu - Blue Plan
-The current version is **v2.3**, the next coming version is **3.0**<br/>
+The current version is **v2.5**, the next coming version is **3.0**<br/>
 **v3.0** will be great release, can one click deploy Oracle RAC in OPC, OCM<br/>
 **v4.0** will be fresh release, can one click deploy Nginx + 2 Node Tomcat, support SLB<br/>
 **v4.5** will be integrate with <a href="https://github.com/guangleibao/jiu">Jiu</a>, support one click deploy Oracle product and opensource solution in OPC, OCM, OCI<br/>
@@ -43,6 +43,7 @@ Biu.main(new String[] { "_cn", "plugin" });<br/>
 
 # You need add Oracle JDBC Driver into maven repository by your self
 mvn install:install-file -Dfile=D:/download/ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=12.1.0 -Dpackaging=jar
+mvn install:install-file -Dfile=D:/download/oracle.cloud.storage.api-13.2.8.jar -DgroupId=com.oracle.cloud -DartifactId=storagesdk -Dversion=13.2.8 -Dpackaging=jar
 
 # Language
 The default language is english, if you want to use Chinese, please change the value _en to _cn in Biu.bat<br />
