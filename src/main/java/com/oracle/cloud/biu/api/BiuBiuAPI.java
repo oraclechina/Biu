@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.oracle.cloud.biu.modules.biubiu.citic.Biu_CITIC_SDK;
 import com.oracle.cloud.biu.modules.biubiu.citic.Biu_CITIC_SDK_Desc;
+import com.oracle.cloud.biu.modules.biubiu.shell.OracleBlockVolumnUpscale;
 import com.oracle.cloud.biu.modules.biubiu.shell.OracleDatabaseAutoDeploy;
 import com.oracle.cloud.biu.modules.biubiu.shell.OracleOrchDatabaseAutoDeploy;
 import com.oracle.cloud.biu.utils.BiuUtils;
@@ -30,6 +31,25 @@ public class BiuBiuAPI {
 		log.info("XID:" + xid);
 //		OracleDatabaseAutoDeploy deploy = new OracleDatabaseAutoDeploy("zhiqiang", "", "biuins4", "oc4", "/oracle/public/OL_7.2_UEKR4_x86_64", "OracleDatabase12cR1", "zhiqiang", "", xid, "100", "Welcome1#", "ZHS16GBK", "orclbiu", "1521", "5500", "5", "true");
 		OracleOrchDatabaseAutoDeploy deploy = new OracleOrchDatabaseAutoDeploy("zhiqiang", "", "biuins4", "oc3", "/oracle/public/OL_7.2_UEKR4_x86_64", "OracleDatabase12cR1", "zhiqiang", "", xid, "100", "Welcome1#", "ZHS16GBK", "orclbiu", "1521", "5500", "5", "true", "biu_database_backup");
+		deploy.start();
+		
+		return BiuUtils.getSucReturn("XID:" + xid);
+	}
+	
+	public static JSONObject createOracleDatabase12cR2AutoDeploy(String path, String sshkeyname, String sshkeycontent, String insname, String shape, String os, String tenant, String pk, String containerid) throws Exception {
+		log.info("BiuBiuUI - Loaded Plugin - createOracleDatabase12cR2AutoDeploy");
+		
+		Biu_CITIC_SDK_Desc citic = new Biu_CITIC_SDK_Desc();
+		UUID uuid = UUID.randomUUID();
+		String xid = uuid.toString().replaceAll("-", "");
+		citic.setXid(xid);
+		citic.setXmessage("ok");
+		citic.setXestimatetime(24);
+		citic.setXdate(new Date());
+		Biu_CITIC_SDK.xmap.put(xid, citic);
+		log.info("XID:" + xid);
+//		OracleDatabaseAutoDeploy deploy = new OracleDatabaseAutoDeploy("zhiqiang", "", "biuins4", "oc4", "/oracle/public/OL_7.2_UEKR4_x86_64", "OracleDatabase12cR2", "zhiqiang", "", xid, "100", "Welcome1#", "ZHS16GBK", "orclbiu", "1521", "5500", "5", "true");
+		OracleOrchDatabaseAutoDeploy deploy = new OracleOrchDatabaseAutoDeploy("zhiqiang", "", "biuins6", "oc3", "/oracle/public/OL_7.2_UEKR4_x86_64", "OracleDatabase12cR2", "zhiqiang", "", xid, "100", "Welcome1#", "ZHS16GBK", "orclbiu", "1521", "5500", "5", "true", "biu_6_database_backup");
 		deploy.start();
 		
 		return BiuUtils.getSucReturn("XID:" + xid);
@@ -83,6 +103,21 @@ public class BiuBiuAPI {
 			return BiuUtils.getSucReturn("queryTransactionStatus");
 		}
 	}
+	
+	public static JSONObject scaleUpOracleDatabaseVolumn(String path, String instancefullname, String volumnname, String newvolumnsize, String oraclesid, String oraclepwd, String privatekey) throws Exception {
+		log.info("BiuBiuUI - Loaded Plugin - scaleUpOracleDatabaseVolumn");
+		UUID uuid = UUID.randomUUID();
+		String xid = uuid.toString().replaceAll("-", "");
+		Biu_CITIC_SDK_Desc citic = new Biu_CITIC_SDK_Desc();
+		citic.setXid(xid);
+		citic.setXmessage("ok");
+		citic.setXestimatetime(5);
+		citic.setXdate(new Date());
+		Biu_CITIC_SDK.xmap.put(xid, citic);
+		OracleBlockVolumnUpscale deploy = new OracleBlockVolumnUpscale(xid, instancefullname, volumnname, privatekey, Integer.parseInt(newvolumnsize), oraclesid, oraclepwd);
+		deploy.start();
+		return BiuUtils.getSucReturn("queryTransactionStatus");
+	}	
 	
 	public static JSONObject bombOracleDatabase(String path, String orchname) throws Exception {
 		log.info("BiuBiuUI - Loaded Plugin - bombOracleDatabase");

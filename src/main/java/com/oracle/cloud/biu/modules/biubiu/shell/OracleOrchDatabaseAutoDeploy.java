@@ -470,7 +470,7 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 		desc.setOracledbcharset(dbcharset);
 		desc.setPrvip(privateip);
 		desc.setPubip(publicip);
-		if (dbversion.equals("OracleDatabase12cR1")) {
+		if (dbversion.equals("OracleDatabase12cR1") || dbversion.equals("OracleDatabase12cR2")) {
 			dbconsoleurl = "https://<public_ip>:5500/em";
 		} else if(dbversion.equals("OracleDatabase11gR2")) {
 			dbconsoleurl = "http://<public_ip>:1158/em";
@@ -506,6 +506,13 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 			// /home/opc/vm_init_db11gR2_BiuBiu.sh " + dbpassword + " " +
 			// dblistenport + " " + charset + " " + dbsid + " " + emport,
 			// System.in, System.out, System.err);
+		} else if (dbversion.equals("OracleDatabase12cR2")){
+			ap.exec("curl -O https://em2.storage.oraclecloud.com/v1/Storage-gse00002004/shared/database/scripts/DB12cR2/vm_init_db12cR2_BiuBiu.sh");
+			ap.exec("chmod +x ./vm_init_db12cR2_BiuBiu.sh");
+//			exitValue = ap.exec("sudo sh /home/opc/vm_init_db12cR2_BiuBiu.sh " + dbpassword + " 1521 "
+//					+ charset + " " + dbsid + " " + "5500" + " " + citicinstanceid);
+			exitValue = ap.exec("sudo sh /home/opc/vm_init_db12cR2_BiuBiu.sh " + dbpassword + " " +
+			 1521 + " " + charset + " " + dbsid + " " + 5500 + " " + citicinstanceid);
 		}
 		if (exitValue.indexOf("Deploying Oracle...done.") > 0)
 			return true;
@@ -648,7 +655,7 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 					SecurityAPI.deleteSecRule(m.get("deletesecrule"), tenant + "_secrule_" + insname);
 					Thread.sleep(1000 * 30);
 				} else if("secgroup".equals(xEvent.getType())) {
-					SecurityAPI.deleteSecList(m.get("deletesecgroup"), tenant + "_secgroup_" + insname);
+					SecurityAPI.deleteSecList(m.get("deletesecgroup"), tenant + "_seclist_" + insname);
 					Thread.sleep(1000 * 30);
 				}
 				log.info("[Process] " + xEvent.getType() + " has been roll backed");
@@ -732,7 +739,7 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 				for (Object object : jsona) {
 					String secgroupname = (String) object;
 					String realsecgroupname = BiuUtils.kvNULL(secgroupname, BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/");
-					if (realsecgroupname.equals(tenant + "_secgroup_" + insname))
+					if (realsecgroupname.equals(tenant + "_seclist_" + insname))
 						return false;
 				}
 			}
@@ -762,7 +769,7 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 				for (Object object : jsona) {
 					String secgroupname = (String) object;
 					String realsecgroupname = BiuUtils.kvNULL(secgroupname, BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/");
-					if (realsecgroupname.equals(tenant + "_secgroup_" + insname))
+					if (realsecgroupname.equals(tenant + "_seclist_" + insname))
 						return false;
 				}
 			}
@@ -791,9 +798,9 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 			bombStatus = checkBombStatus(orchid);
 			times ++;
 		} while ((!bombStatus) && (times < RETRY));
-		Thread.sleep(1000 * 30);
+		Thread.sleep(1000 * 10);
 		SecurityAPI.deleteSecRule(m.get("deletesecrule"), tenant + "_secrule_" + insname);
-		Thread.sleep(1000 * 30);
+		Thread.sleep(1000 * 10);
 		SecurityAPI.deleteSecList(m.get("deletesecgroup"), tenant + "_seclist_" + insname);
 		
 		if (!bombStatus)

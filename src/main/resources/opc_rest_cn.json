@@ -561,7 +561,7 @@
         {
             "name": "StorageAPI",
             "endpoint": "/storage/volume/{container}/",
-            "desc": "存储",
+            "desc": "块存储",
             "prompt" : "list",
             "subcommand" : [
 				{
@@ -713,6 +713,60 @@
 		            ]
 	            }
             ]
+        },
+		{
+            "name": "objectstorage",
+            "endpoint": "/objectstorage/",
+            "desc": "对象存储",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "ObjectStorageAPI-listContainer",
+					"endpoint": "/objectstorage/",
+		            "desc": "列出所有容器",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "objsp1",
+							"endpoint": "input",
+				            "desc": "请输入排除路径逗号分隔, 查看全部请输入all",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "ObjectStorageAPI-listObjects",
+					"endpoint": "/objectstorage/",
+		            "desc": "列出容器下所有对象",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "objsp2",
+							"endpoint": "input",
+				            "desc": "请输入容器名",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "objsp3",
+							"endpoint": "input",
+				            "desc": "请输入精确匹配路径",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "objsp4",
+							"endpoint": "input",
+				            "desc": "请输入显示单位，G或者M，默认为M",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "objsp5",
+							"endpoint": "input",
+				            "desc": "请输入展开模式，默认为list，可选择聚合操作cluster",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }	            
+			]			
         },
         {
             "name": "listnetworks",
@@ -1042,6 +1096,106 @@
 				            "desc": "备份容器id",
 				            "prompt" : "input"
 		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-createOracleDatabase12cR2AutoDeploy",
+					"endpoint": "/biubiu/",
+		            "desc": "自动创建并部署Oracle数据库12cR2",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_6_sshkeyname",
+							"endpoint": "input",
+				            "desc": "创建资源使用已有的SshKey名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_6_sshkeycontent",
+							"endpoint": "input",
+				            "desc": "如果系统没有sshkey需要创建时，需要传递的sshkey公钥内容",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_6_insname",
+							"endpoint": "input",
+				            "desc": "计算实例名称",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_6_shape",
+							"endpoint": "input",
+				            "desc": "计算实例型号",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_6_os",
+							"endpoint": "input",
+				            "desc": "实例操作系统",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "biubiu_6_tenant",
+							"endpoint": "input",
+				            "desc": "根租户名称",
+				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_6_pk",
+							"endpoint": "input",
+				            "desc": "sshkey私钥",
+				            "prompt" : "input"
+		            	},		            	
+		            	{
+		            		"name": "biubiu_6_cid",
+							"endpoint": "input",
+				            "desc": "备份容器id",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "BiuBiuAPI-scaleUpOracleDatabaseVolumn",
+					"endpoint": "/biubiu/",
+		            "desc": "一键扩容Oracle数据库存储空间",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_5_insfullname",
+							"endpoint": "input",
+				            "desc": "请输入计算实例全名",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "biubiu_5_volumnname",
+							"endpoint": "input",
+				            "desc": "请输入存储卷名",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "biubiu_5_newvolumnsize",
+							"endpoint": "input",
+				            "desc": "请输入存储卷扩容后大小",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "biubiu_5_oraclesid",
+							"endpoint": "input",
+				            "desc": "请输入Oracle SID",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "biubiu_5_oraclepwd",
+							"endpoint": "input",
+				            "desc": "请输入Oracle SYS密码",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "biubiu_5_privatekey",
+							"endpoint": "input",
+				            "desc": "请输入计算实例私钥",
+				            "prompt" : "input"
+		            	}      		            	
 		            ]
 	            },
 				{

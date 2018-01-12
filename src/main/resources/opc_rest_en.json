@@ -879,6 +879,20 @@
             "prompt" : "list",
 			"subcommand" : [
 				{
+					"name": "BiuBiuAPI-queryTransactionStatus",
+					"endpoint": "/biubiu/",
+		            "desc": "Query The Transaction Status",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "biubiu_3_xid",
+							"endpoint": "input",
+				            "desc": "Please input the XID",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+	            {
 					"name": "BiuBiuAPI-createOracleDatabase11gR2AutoDeploy",
 					"endpoint": "/biubiu/",
 		            "desc": "ONE Click Create A VM And Deploy Oracle Database 11gR2",
@@ -989,49 +1003,65 @@
 				            "prompt" : "input"
 		            	}
 		            ]
-	            },	            
+	            },
 				{
-					"name": "BiuBiuAPI-createOracleDatabaseRACAutoDeploy",
+					"name": "BiuBiuAPI-scaleUpOracleDatabaseVolumn",
 					"endpoint": "/biubiu/",
-		            "desc": "自动创建并部署Oracle数据库12c-RAC架构",
+		            "desc": "ONE Click Scale Up Oracle Database Block Volumn Size",
 		            "prompt" : "input",
 		            "subcommand" : [
 		            	{
-		            		"name": "biubiu_1_sshkeyname",
+		            		"name": "biubiu_5_insfullname",
 							"endpoint": "input",
-				            "desc": "创建资源使用已有的SshKey名称",
+				            "desc": "Please input instance full name",
 				            "prompt" : "input"
-		            	}
+		            	},
+						{
+		            		"name": "biubiu_5_volumnname",
+							"endpoint": "input",
+				            "desc": "Please input volumn name",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "biubiu_5_newvolumnsize",
+							"endpoint": "input",
+				            "desc": "new size(Unit G)",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "biubiu_5_oraclesid",
+							"endpoint": "input",
+				            "desc": "Oracle SID",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "biubiu_5_oraclepwd",
+							"endpoint": "input",
+				            "desc": "Oracle Password for SYS",
+				            "prompt" : "input"
+		            	},
+						{
+		            		"name": "biubiu_5_privatekey",
+							"endpoint": "input",
+				            "desc": "Please input your private key",
+				            "prompt" : "input"
+		            	}      		            	
 		            ]
 	            },
 				{
-					"name": "BiuBiuAPI-createOracleWeblogicAutoDeploy",
+					"name": "BiuBiuAPI-bombOracleDatabase",
 					"endpoint": "/biubiu/",
-		            "desc": "自动创建并部署Oracle Weblogic12c",
+		            "desc": "一键删除Oracle数据库部署计划",
 		            "prompt" : "input",
 		            "subcommand" : [
 		            	{
-		            		"name": "biubiu_1_sshkeyname",
+		            		"name": "biubiu_4_orchname",
 							"endpoint": "input",
-				            "desc": "创建资源使用已有的SshKey名称",
+				            "desc": "请输入编排计划名",
 				            "prompt" : "input"
-		            	}
+		            	}	            	
 		            ]
-	            },
-				{
-					"name": "BiuBiuAPI-createHadoopClusterAutoDeploy",
-					"endpoint": "/biubiu/",
-		            "desc": "自动创建并部署Hadoop2个节点集群",
-		            "prompt" : "input",
-		            "subcommand" : [
-		            	{
-		            		"name": "biubiu_1_sshkeyname",
-							"endpoint": "input",
-				            "desc": "创建资源使用已有的SshKey名称",
-				            "prompt" : "input"
-		            	}
-		            ]
-	            }     
+	            }    
 	    	]
         }
     ]

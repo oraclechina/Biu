@@ -4,6 +4,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +20,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.oracle.cloud.biu.api.BasicAuthenticationAPI;
 import com.oracle.cloud.biu.api.ComputeAPI;
 import com.oracle.cloud.biu.api.NetworkAPI;
+import com.oracle.cloud.biu.api.ObjectStorageAPI;
 import com.oracle.cloud.biu.api.StorageAPI;
+import com.oracle.cloud.biu.api.TokenAPI;
 import com.oracle.cloud.biu.entity.KV;
+import com.oracle.cloud.biu.test.TestObject1;
 import com.oracle.cloud.biu.utils.BiuUtils;
 import com.thoughtworks.xstream.XStream;
 
@@ -33,6 +37,9 @@ import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import jline.TerminalFactory;
 import lombok.extern.log4j.Log4j;
+import oracle.cloud.storage.CloudStorage;
+import oracle.cloud.storage.CloudStorageConfig;
+import oracle.cloud.storage.CloudStorageFactory;
 
 @Log4j
 public class Biu {
@@ -69,7 +76,7 @@ public class Biu {
 			Map<String, String> m = BiuUtils.getProps();
 			
 			//Login to Biu
-			BasicAuthenticationAPI.setUserInfoForLogin(m.get("cloud_tenant"), m.get("endpoint"), m.get("cloud_domain"),
+			BasicAuthenticationAPI.setUserInfoForLogin(m.get("storageendpoint"), m.get("endpoint"), m.get("cloud_domain"),
 					m.get("cloud_username"), m.get("cloud_password"));
 			BasicAuthenticationAPI.login(m.get("login"));
 			
@@ -78,7 +85,10 @@ public class Biu {
 			org.json.JSONObject obj2 = NetworkAPI.listNetworkAssociations(m.get("list_network_associations"));
 			BiuUtils.cacheStorageAttachementRelation(obj1.optJSONArray("result"));
 			BiuUtils.cacheNetworkAttachementRelation(obj2.optJSONArray("result"));
-			
+			//Init Object Storage
+			initObjectStorage();
+			new TokenAPI().start();
+			log.info("Biu Loaded Successful.");
 			if (StringUtils.isBlank(pluginboot)) {
 				showInteractiveMenu(MENU, MENU);
 			}
@@ -209,6 +219,19 @@ public class Biu {
 		}
 	}
 
+	public static void initObjectStorage() throws Exception {
+		CloudStorageConfig myConfig = new CloudStorageConfig();
+		myConfig.setServiceName("Storage-" + BasicAuthenticationAPI.CLOUD_DOMAIN)
+				.setUsername(BasicAuthenticationAPI.CLOUD_USERNAME).setPassword(BasicAuthenticationAPI.CLOUD_PASSWORD.toCharArray())
+				.setServiceUrl(BasicAuthenticationAPI.STORAGEENDPOINT);
+		final CloudStorage myConnection = CloudStorageFactory.getStorage(myConfig);
+		if (null != myConnection) {
+			log.debug("Init Object Storage Connection Successful.");
+			ObjectStorageAPI.connection = myConnection;
+		}
+//		TestObject1.main(null);
+	}
+
 	private static void initShape() {
 		Biu.SHAPEMAP.put("oc3", "1_8");
 		Biu.SHAPEMAP.put("oc4", "2_15");
@@ -330,9 +353,13 @@ public class Biu {
 		ConsolePrompt prompt = new ConsolePrompt();
 		PromptBuilder promptBuilder = prompt.getPromptBuilder();
 
-		promptBuilder.createInputPrompt().name("endpoint").message("Please Input Your Oracle Cloud Endpoint, If You Do Not Know Please Contact To Oracle Sales Consultant").defaultValue("")
+		promptBuilder.createInputPrompt().name("endpoint").message("Please Input Your Oracle Cloud Compute Endpoint, If You Do Not Know Please Contact To Oracle Sales Consultant").defaultValue("")
 				// .mask('*')
 				.addPrompt();
+		
+		promptBuilder.createInputPrompt().name("storageendpoint").message("Please Input Your Oracle Cloud Storage Endpoint, If You Do Not Know Please Contact To Oracle Sales Consultant").defaultValue("")
+		// .mask('*')
+		.addPrompt();
 
 		promptBuilder.createInputPrompt().name("clouddomain").message("Please Input Your Cloud Domain, If You Do Not Know Please Contact To Oracle Sales Consultant")
 				.defaultValue("")
@@ -345,10 +372,6 @@ public class Biu {
 
 		promptBuilder.createInputPrompt().name("cloudpassword").message("Please Input Your Cloud Account Password").defaultValue("")
 				 .mask('*')
-				.addPrompt();
-
-		promptBuilder.createInputPrompt().name("cloudtenant").message("Please Input Your Cloud Account Tenant Username").defaultValue("")
-				// .mask('*')
 				.addPrompt();
 		
 		promptBuilder.createInputPrompt().name("language").message("Please Input Language Name For Biu Menu").defaultValue("")

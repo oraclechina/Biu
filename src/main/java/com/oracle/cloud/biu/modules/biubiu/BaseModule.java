@@ -30,10 +30,12 @@ public abstract class BaseModule extends Thread {
 		m = BiuUtils.getProps();
 		
 		//Login to Biu
-		BasicAuthenticationAPI.setUserInfoForLogin(m.get("cloud_tenant"), m.get("endpoint"), m.get("cloud_domain"),
+		BasicAuthenticationAPI.setUserInfoForLogin(m.get("storageendpoint"), m.get("endpoint"), m.get("cloud_domain"),
 				m.get("cloud_username"), m.get("cloud_password"));
 		BasicAuthenticationAPI.login(m.get("login"));
 	}
+	
+	
 	public abstract void init();
 	
 	public abstract RespEntity deploy();

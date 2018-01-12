@@ -64,8 +64,8 @@ public class BiuUtils extends EncryptUtil {
 						.parseObject(source);
 
 				propsMap.put("endpoint", ((JSONObject) map1.get("endpoint")).getString("input"));
+				propsMap.put("storageendpoint", ((JSONObject) map1.get("storageendpoint")).getString("input"));
 				propsMap.put("cloud_username", ((JSONObject) map1.get("clouduser")).getString("input"));
-				propsMap.put("cloud_tenant", ((JSONObject) map1.get("cloudtenant")).getString("input"));
 				propsMap.put("cloud_domain", ((JSONObject) map1.get("clouddomain")).getString("input"));
 				propsMap.put("cloud_password", ((JSONObject) map1.get("cloudpassword")).getString("input"));
 				return propsMap;
@@ -88,6 +88,14 @@ public class BiuUtils extends EncryptUtil {
 		return sdstr;
 	}
 
+	public static HttpResponse<JsonNode> rest(String path) throws Exception {
+		HttpResponse<JsonNode> jsonresp = null;
+		jsonresp = Unirest.get(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", BasicAuthenticationAPI.ACCEPT_COMPUTE)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
+		return jsonresp;
+	}
+	
 	public static JsonNode rest(String method, String accept, String path) throws Exception {
 		HttpResponse<JsonNode> jsonresp = null;
 		if (method.equals("get")) {
@@ -410,12 +418,47 @@ public class BiuUtils extends EncryptUtil {
 			en = goHasIPNetworkIPShowResult(jsonArray, en);
 		else if ("com.oracle.cloud.biu.api.NetworkAPI-listIPN".equals(method))
 			en = goHasIPNetworkShowResult(jsonArray, en);
+		else if ("com.oracle.cloud.biu.api.ObjectStorageAPI-listContainer".equals(method))
+			en = goObjectStorageCShowResult(jsonArray, en);
+		else if ("com.oracle.cloud.biu.api.ObjectStorageAPI-listObjects".equals(method))
+			en = goObjectStorageShowResult(jsonArray, en);		
 		else if ("com.oracle.cloud.biu.api.ComputeAPI-listComputes".equals(method)) {
 			cacheStorageAttachementRelation(jsonArray);
 			cacheNetworkAttachementRelation(jsonArray);
 			en = goHasComputeInstancesShowResult(jsonArray, en);
 		} else
 			en = goHasShowResult(jsonArray, en);
+		return en;
+	}
+
+	private static AsciiTableEntity goObjectStorageCShowResult(JSONArray jsonArray, AsciiTableEntity en) {
+		String[] headers = { "Name", "Count", "Size" };
+		String[][] data = new String[jsonArray.length()][3];
+		int i = 0;
+		for (Object tempobj : jsonArray) {
+			org.json.JSONObject obj = (org.json.JSONObject) tempobj;
+			data[i][0] = obj.getString("name");
+			data[i][1] = obj.getString("count");
+			data[i][2] = obj.getString("size");
+			i++;
+		}
+		en.setHeader(headers);
+		en.setData(data);
+		return en;
+	}
+	
+	private static AsciiTableEntity goObjectStorageShowResult(JSONArray jsonArray, AsciiTableEntity en) {
+		String[] headers = { "Name", "Size" };
+		String[][] data = new String[jsonArray.length()][2];
+		int i = 0;
+		for (Object tempobj : jsonArray) {
+			org.json.JSONObject obj = (org.json.JSONObject) tempobj;
+			data[i][0] = obj.getString("name");
+			data[i][1] = obj.getString("size");
+			i++;
+		}
+		en.setHeader(headers);
+		en.setData(data);
 		return en;
 	}
 
