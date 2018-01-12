@@ -4,7 +4,7 @@
 	<groupId>com.oracle.cloud</groupId>
 	
 	<artifactId>Biu</artifactId>
-	<version>2.4</version>
+	<version>2.5</version>
 	<name>Biu</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>

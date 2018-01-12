@@ -9,9 +9,13 @@ Base On GPL3.0<br/>
 **Anybody who used Biu any code in your program, he/she have to let me know. Since you have used Biu any code, it means you have agree this license.**<br/>
 Notification Email: zhiqiang.x.liu@oracle.com
 
-# Programmer Black List
-List who used Biu code but don't let me know.<br/>
-Nobody for now.
+# Update Log
+Biu v1.0 - Java SDK for compute instance, network, ipnetwork, block volumn, security list, security rule, ssh key in OPC, OCC<br/>
+Biu v2.1 - Added Biubiu plugin, support oneclick install Oracle database 11gR2, 12cR1, 12cR2<br/>
+Biu v2.2 - Added Orchestration Function<br/>
+Biu v2.3 - Added XTransaction Query, Delete by One Click<br/>
+Biu v2.4 - Added RMAN backup Oracle database to Object Storage without local storage.<br/>
+Biu v2.5 - Added Object Storage Module.<br/>
 
 # Biu - User List
 **Oracle China CPSC Team**<br />
