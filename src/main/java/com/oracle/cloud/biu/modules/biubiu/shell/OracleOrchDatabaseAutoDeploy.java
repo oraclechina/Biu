@@ -509,10 +509,9 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 		} else if (dbversion.equals("OracleDatabase12cR2")){
 			ap.exec("curl -O https://em2.storage.oraclecloud.com/v1/Storage-gse00002004/shared/database/scripts/DB12cR2/vm_init_db12cR2_BiuBiu.sh");
 			ap.exec("chmod +x ./vm_init_db12cR2_BiuBiu.sh");
-//			exitValue = ap.exec("sudo sh /home/opc/vm_init_db12cR2_BiuBiu.sh " + dbpassword + " 1521 "
-//					+ charset + " " + dbsid + " " + "5500" + " " + citicinstanceid);
-			exitValue = ap.exec("sudo sh /home/opc/vm_init_db12cR2_BiuBiu.sh " + dbpassword + " " +
-			 1521 + " " + charset + " " + dbsid + " " + 5500 + " " + citicinstanceid);
+			exitCode = shell.exec("sudo sh /home/opc/vm_init_db12cR2_BiuBiu.sh " + dbpassword + " 1521 " + charset + " " + dbsid + " " + "5500" + " " + citicinstanceid, System.in, System.out, System.err);
+//			exitValue = ap.exec("sudo sh /home/opc/vm_init_db12cR2_BiuBiu.sh " + dbpassword + " " +
+//			 1521 + " " + charset + " " + dbsid + " " + 5500 + " " + citicinstanceid);
 		}
 		if (exitValue.indexOf("Deploying Oracle...done.") > 0)
 			return true;
@@ -710,7 +709,7 @@ public class OracleOrchDatabaseAutoDeploy extends BaseModule {
 				log.error("[Process][Wrong Params]tenant=" + tenant);
 				log.error("[Process][Wrong Params]instancename=" + insname);
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			log.error("[Process][Rollback Has Exception]sid=" + orchid);
 			log.error("[Process][Rollback Has Exception]Message=" + e.getMessage());
 		}

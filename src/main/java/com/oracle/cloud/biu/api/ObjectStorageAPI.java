@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import com.oracle.cloud.biu.Biu;
 import com.oracle.cloud.biu.entity.KV;
-import com.oracle.cloud.biu.utils.BiuUtils;
 
 import lombok.extern.log4j.Log4j;
 import oracle.cloud.storage.CloudStorage;
@@ -36,11 +35,29 @@ public class ObjectStorageAPI {
 			}
 		}
 	}
+
+	public static void deleteContainer(String path, String conname) {
+		connection.deleteContainer(conname);
+	}
+	
+	public static void deleteObjects(String path, String conname, String fc, String blurtiercnt, String key) {
+		if (StringUtils.isBlank(fc)) {
+			connection.deleteObject(conname, key);
+			return;
+		}
+		JSONObject jsonobj = listObjects(path, conname, fc, blurtiercnt, "G", "list");
+		JSONObject t1 = null;
+		JSONArray ary1 = jsonobj.getJSONArray("result");
+		for (Object object : ary1) {
+			t1 = (JSONObject) object;
+			deleteObjects(path, conname, null, null, t1.optString("name"));
+		}
+	}
 	
 	public static JSONObject listContainer(String path, String fc) {
 		List<Container> clist = new ArrayList<Container>();
 		Map<String, String> blacklist = new HashMap<String, String>();
-		
+
 		if ("all".equals(fc)) {
 			clist = connection.listContainers();
 		} else {
@@ -52,7 +69,7 @@ public class ObjectStorageAPI {
 				blacklist.put(string, string);
 			}
 		}
-		
+
 		JSONObject json = new JSONObject();
 		JSONArray ary = new JSONArray();
 		JSONObject t1 = null;
@@ -71,11 +88,12 @@ public class ObjectStorageAPI {
 			}
 		}
 		json.put("result", ary);
+		json.optJSONArray("result");
 		System.out.println("Total Container Size: " + ary.length());
 		return json;
 	}
 	
-	public static JSONObject listObjects(String path, String containername, String fc, String unit, String model) {
+	public static JSONObject listObjects(String path, String containername, String fc, String blurtiercnt, String unit, String model) {
 		Map<QueryOption, String> map = new HashMap<QueryOption, String>();
 		Map<String, KV> keymap = new HashMap<String, KV>();
 //		map.put(QueryOption.DELIMITER, value);
@@ -85,7 +103,18 @@ public class ObjectStorageAPI {
 			fc = "";
 		if (fc.indexOf("%") > -1) {
 			qr = connection.listObjectsByPath(containername, ",", "", map);
-			fc = fc.replaceAll("%", ".{0,100}/.{0,100}");
+			if (!StringUtils.isBlank(blurtiercnt)) {
+				if (Integer.parseInt(blurtiercnt) == 1)
+					fc = fc.replaceAll("%", ".{0,100}");
+				else if (Integer.parseInt(blurtiercnt) == 2)
+					fc = fc.replaceAll("%", ".{0,100}/.{0,100}");
+				else if (Integer.parseInt(blurtiercnt) == 3)
+					fc = fc.replaceAll("%", ".{0,100}/.{0,100}/.{0,100}");
+				else if (Integer.parseInt(blurtiercnt) == 4)
+					fc = fc.replaceAll("%", ".{0,100}/.{0,100}/.{0,100}/.{0,100}");
+				else if (Integer.parseInt(blurtiercnt) == 5)
+					fc = fc.replaceAll("%", ".{0,100}/.{0,100}/.{0,100}/.{0,100}/.{0,100}");
+			}
 			hasblur = true;
 		} else {
 			qr = connection.listObjectsByPath(containername, ",", fc, map);
@@ -128,14 +157,13 @@ public class ObjectStorageAPI {
 					else {
 						String[] temp1 = fc.split("/");
 						String[] temp2 = con.getKey().split("/");
-						if ((temp1.length > 0) && (temp2.length > 0)) {
+						if ((temp1[0].equals(temp2[0])) && (con.getKey().indexOf(temp1[temp1.length - 1]) > -1)) {
 							if (temp1[0].equals(temp2[0]))
 								keymap.put(keystr.trim(), k2);
 						}
 					}
 				}
 			} else {
-				t1.put("name", keystr);
 				BigDecimal bd = new BigDecimal(con.getSize());
 				BigDecimal bd2;
 				
@@ -148,16 +176,30 @@ public class ObjectStorageAPI {
 				}
 				BigDecimal bd3 = bd.divide(bd2);
 				bd3 = bd3.setScale(2, BigDecimal.ROUND_HALF_UP);
-//				if (null == blacklist.get(con.getName())) {
+				
+				if (hasblur) {
+					String[] temp1 = fc.split("/");
+					String[] temp2 = con.getKey().split("/");
+					if ((temp1.length > 0) && (temp2.length > 0)) {
+						if ((temp1[0].equals(temp2[0])) && (con.getKey().indexOf(temp1[temp1.length - 1]) > -1)) {
+							t1.put("name", keystr);
+							t1.put("size", bd3.toString() + unit);
+							ary.put(t1);
+						}
+					}
+				} else {
+					t1.put("name", keystr);
 					t1.put("size", bd3.toString() + unit);
 					ary.put(t1);
+				}
+				
+//				if (null == blacklist.get(con.getName())) {
 //				}				
 			}
 		}
 		if (model.toUpperCase().equals("CLUSTER")) {
 			for (String ky : keymap.keySet()) {
 				t1 = new JSONObject();
-				System.out.println("输出：" + ky);
 				t1.put("name", ky);
 				
 				BigDecimal bd = new BigDecimal(Long.parseLong(keymap.get(ky).getValue()));

@@ -2,7 +2,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.oracle.cloud</groupId>
-	
 	<artifactId>Biu</artifactId>
 	<version>2.5</version>
 	<name>Biu</name>
@@ -114,6 +113,11 @@
 			<version>1.2</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.glassfish</groupId>
+		    <artifactId>javax.json</artifactId>
+		    <version>1.0.4</version>
+		</dependency>
+		<dependency>
 			  <groupId>com.oracle</groupId>
 			  <artifactId>console-ui</artifactId>
 			  <version>0.0.9</version>
@@ -122,11 +126,6 @@
 			  <groupId>com.jakewharton.fliptables</groupId>
 			  <artifactId>fliptables</artifactId>
 			  <version>1.0.2</version>
-		</dependency>
-		<dependency>
-			  <groupId>com.oracle</groupId>
-			  <artifactId>console-ui</artifactId>
-			  <version>0.0.9</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
@@ -168,6 +167,11 @@
 		    <groupId>com.oracle.cloud</groupId>
 		    <artifactId>storagesdk</artifactId>
 		    <version>13.2.8</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.oracle.cloudstorage</groupId>
+		    <artifactId>ftm</artifactId>
+		    <version>2.3.4</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.glassfish.jersey.core</groupId>

@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +25,7 @@ import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -41,6 +46,14 @@ import com.thoughtworks.xstream.XStream;
 
 import de.codeshelf.consoleui.prompt.PromtResultItemIF;
 import lombok.extern.log4j.Log4j;
+import oracle.cloud.storage.CloudStorage;
+import oracle.cloudstorage.ftm.CloudStorageClass;
+import oracle.cloudstorage.ftm.FileTransferAuth;
+import oracle.cloudstorage.ftm.FileTransferManager;
+import oracle.cloudstorage.ftm.TransferResult;
+import oracle.cloudstorage.ftm.TransferTask;
+import oracle.cloudstorage.ftm.UploadConfig;
+import oracle.cloudstorage.ftm.exception.ClientException;
 
 @Log4j
 public class BiuUtils extends EncryptUtil {
@@ -67,7 +80,8 @@ public class BiuUtils extends EncryptUtil {
 				propsMap.put("storageendpoint", ((JSONObject) map1.get("storageendpoint")).getString("input"));
 				propsMap.put("cloud_username", ((JSONObject) map1.get("clouduser")).getString("input"));
 				propsMap.put("cloud_domain", ((JSONObject) map1.get("clouddomain")).getString("input"));
-				propsMap.put("cloud_password", ((JSONObject) map1.get("cloudpassword")).getString("input"));
+				propsMap.put("cloud_password",
+						((JSONObject) map1.get("cloudpassword")).getString("input").replaceAll("！", "!"));
 				return propsMap;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -90,12 +104,35 @@ public class BiuUtils extends EncryptUtil {
 
 	public static HttpResponse<JsonNode> rest(String path) throws Exception {
 		HttpResponse<JsonNode> jsonresp = null;
-		jsonresp = Unirest.get(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", BasicAuthenticationAPI.ACCEPT_COMPUTE)
-					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
-					.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
+		jsonresp = Unirest.get(BasicAuthenticationAPI.ENDPOINT + path)
+				.header("Accept", BasicAuthenticationAPI.ACCEPT_COMPUTE)
+				.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+				.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
 		return jsonresp;
 	}
-	
+
+	public static JsonNode restMetric(String method, String accept, String path) throws Exception {
+		HttpResponse<JsonNode> jsonresp = null;
+		if (method.equals("get")) {
+			jsonresp = Unirest.get(BasicAuthenticationAPI.METRICENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("X-ID-TENANT-NAME", BasicAuthenticationAPI.CLOUD_DOMAIN).asJson();
+		} else if (method.equals("post")) {
+			jsonresp = Unirest.post(BasicAuthenticationAPI.METRICENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
+		} else if (method.equals("put")) {
+			jsonresp = Unirest.put(BasicAuthenticationAPI.METRICENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
+		} else if (method.equals("delete")) {
+			jsonresp = Unirest.delete(BasicAuthenticationAPI.METRICENDPOINT + path).header("Accept", accept)
+					.header("Content-Type", BasicAuthenticationAPI.CONTENT_TYPE)
+					.header("Cookie", BasicAuthenticationAPI.COOKIE).asJson();
+		}
+		return jsonresp.getBody();
+	}
+
 	public static JsonNode rest(String method, String accept, String path) throws Exception {
 		HttpResponse<JsonNode> jsonresp = null;
 		if (method.equals("get")) {
@@ -158,7 +195,8 @@ public class BiuUtils extends EncryptUtil {
 		return jsonresp.getStatus();
 	}
 
-	public static int rest(String method, String accept, String path, String jsonbody, boolean withhead) throws Exception {
+	public static int rest(String method, String accept, String path, String jsonbody, boolean withhead)
+			throws Exception {
 		HttpResponse<JsonNode> jsonresp = null;
 		if (method.equals("post")) {
 			jsonresp = Unirest.post(BasicAuthenticationAPI.ENDPOINT + path).header("Accept", accept)
@@ -175,7 +213,7 @@ public class BiuUtils extends EncryptUtil {
 		}
 		return jsonresp.getStatus();
 	}
-	
+
 	public static String ConvertStream2Json(InputStream inputStream) {
 		String jsonStr = "";
 		// ByteArrayOutputStream相当于内存输出流
@@ -421,7 +459,7 @@ public class BiuUtils extends EncryptUtil {
 		else if ("com.oracle.cloud.biu.api.ObjectStorageAPI-listContainer".equals(method))
 			en = goObjectStorageCShowResult(jsonArray, en);
 		else if ("com.oracle.cloud.biu.api.ObjectStorageAPI-listObjects".equals(method))
-			en = goObjectStorageShowResult(jsonArray, en);		
+			en = goObjectStorageShowResult(jsonArray, en);
 		else if ("com.oracle.cloud.biu.api.ComputeAPI-listComputes".equals(method)) {
 			cacheStorageAttachementRelation(jsonArray);
 			cacheNetworkAttachementRelation(jsonArray);
@@ -446,7 +484,7 @@ public class BiuUtils extends EncryptUtil {
 		en.setData(data);
 		return en;
 	}
-	
+
 	private static AsciiTableEntity goObjectStorageShowResult(JSONArray jsonArray, AsciiTableEntity en) {
 		String[] headers = { "Name", "Size" };
 		String[][] data = new String[jsonArray.length()][2];
@@ -747,6 +785,20 @@ public class BiuUtils extends EncryptUtil {
 		return en;
 	}
 
+	public static List convertResultSet2List(ResultSet rs) throws SQLException {
+		List list = new ArrayList();
+		ResultSetMetaData md = rs.getMetaData();
+		int columnCount = md.getColumnCount();
+		while (rs.next()) {
+			Map rowData = new HashMap();// 声明Map
+			for (int i = 1; i <= columnCount; i++) {
+				rowData.put(md.getColumnName(i), rs.getObject(i));
+			}
+			list.add(rowData);
+		}
+		return list;
+	}
+
 	private static String mask(String tempname) {
 		return tempname.replaceAll(
 				"/" + BasicAuthenticationAPI.CLOUD_UNDOMAIN + "/" + BasicAuthenticationAPI.CLOUD_USERNAME + "/", "...");
@@ -806,12 +858,12 @@ public class BiuUtils extends EncryptUtil {
 				j.put("message", "操作完毕，请再次校验，输出内容：" + string.substring(1, 9));
 			else
 				j.put("message", "操作完毕，请再次校验，输出内容：" + string);
-			j.put("biureturn", string);			
+			j.put("biureturn", string);
 		} else
 			j.put("message", "操作完毕，请再次校验，输出内容：" + string);
 		return j;
 	}
-	
+
 	public static org.json.JSONObject getSucReturn(String string, org.json.JSONObject biureturn) {
 		org.json.JSONObject j = new org.json.JSONObject();
 		if (!StringUtils.isBlank(string)) {
@@ -823,14 +875,14 @@ public class BiuUtils extends EncryptUtil {
 		} else
 			j.put("message", "操作完毕，请再次校验，输出内容：" + string);
 		return j;
-	}	
+	}
 
 	public static org.json.JSONObject getErrReturn(String string, String message) {
 		org.json.JSONObject j = new org.json.JSONObject();
 		j.put("message", "操作失败原因[" + string + "]：" + message);
 		return j;
 	}
-	
+
 	public static org.json.JSONObject getErrReturn(String string, String message, boolean withhead) {
 		org.json.JSONObject j = new org.json.JSONObject();
 		j.put("message", "操作失败原因[" + string + "]：" + message);
@@ -852,9 +904,85 @@ public class BiuUtils extends EncryptUtil {
 	public static int dateDiff(Date date1, Date date2) {
 		// 日期相减得到相差的日期
 		long minu = (date1.getTime() - date2.getTime()) / (60 * 1000) > 0
-				? (date1.getTime() - date2.getTime()) / (60 * 1000)
-				: (date2.getTime() - date1.getTime()) / (60 * 1000);
+				? (date1.getTime() - date2.getTime()) / (60 * 1000) : (date2.getTime() - date1.getTime()) / (60 * 1000);
 
 		return (int) minu;
+	}
+
+	public static TransferResult uploadLargeObject2OracleObjectStorageClassic(CloudStorage myConnection,
+			String filepath) {
+		FileTransferAuth auth = new FileTransferAuth("cloud.admin", "aSleEP@0TyKe".toCharArray(), "Storage",
+				"https://gse00002004.storage.oraclecloud.com", "gse00002004");
+		FileTransferManager manager = null;
+		try {
+			manager = FileTransferManager.getDefaultFileTransferManager(auth);
+			String containerName = "shared";
+			File file = new File("D:/wu2");
+			UploadConfig uploadConfig = new UploadConfig();
+			uploadConfig.setOverwrite(true);
+			uploadConfig.setStorageClass(CloudStorageClass.Standard);
+			// uploadConfig.setSegmentSize(1 * 1024 * 1024 * 1024);
+			uploadConfig.setSegmentSize(1 * 1024 * 1024 * 102);
+			// TransferResult uploadResult = manager.upload(uploadConfig,
+			// containerName, null, file);
+
+			TransferTask<TransferResult> uploadTask = manager.uploadAsync(uploadConfig, containerName, null, file);
+			System.out.println("done." + uploadTask.getResult().getState());
+		} catch (ClientException ce) {
+			System.out.println("Operation failed. " + ce.getMessage());
+		} finally {
+			if (manager != null) {
+				manager.shutdown();
+			}
+		}
+		return null;
+	}
+	
+	public static String Date2String(Date d) {
+		SimpleDateFormat sdf = new  SimpleDateFormat("yyyy-MM-dd");
+		String datestr = sdf.format(d);
+		return datestr;
+	}
+	
+	public static Date string2Date(String s) {
+		try {
+			Date p = DateUtils.parseDate(s, "yyyy-MM-dd");
+			return p;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static TransferResult uploadLargeObject2OracleObjectStorage(CloudStorage myConnection, String filepath) {
+		FileTransferAuth auth = new FileTransferAuth("cloud.admin", "aSleEP@0TyKe".toCharArray(), "Storage",
+				"https://gse00002004.storage.oraclecloud.com", "gse00002004");
+		FileTransferManager manager = null;
+		try {
+			manager = FileTransferManager.getDefaultFileTransferManager(auth);
+			String containerName = "shared";
+			File file = new File("D:/wu2");
+			UploadConfig uploadConfig = new UploadConfig();
+			uploadConfig.setOverwrite(true);
+			uploadConfig.setStorageClass(CloudStorageClass.Standard);
+			// uploadConfig.setSegmentSize(1 * 1024 * 1024 * 1024);
+			uploadConfig.setSegmentSize(1 * 1024 * 1024 * 102);
+			// TransferResult uploadResult = manager.upload(uploadConfig,
+			// containerName, null, file);
+
+			TransferTask<TransferResult> uploadTask = manager.uploadAsync(uploadConfig, containerName, null, file);
+			System.out.println("done." + uploadTask.getResult().getState());
+		} catch (ClientException ce) {
+			System.out.println("Operation failed. " + ce.getMessage());
+		} finally {
+			if (manager != null) {
+				manager.shutdown();
+			}
+		}
+		return null;
+	}
+
+	public static void main(String[] args) {
+		BiuUtils.uploadLargeObject2OracleObjectStorageClassic(null, null);
 	}
 }

@@ -30,7 +30,9 @@ public class BiuBiuAPI {
 		Biu_CITIC_SDK.xmap.put(xid, citic);
 		log.info("XID:" + xid);
 //		OracleDatabaseAutoDeploy deploy = new OracleDatabaseAutoDeploy("zhiqiang", "", "biuins4", "oc4", "/oracle/public/OL_7.2_UEKR4_x86_64", "OracleDatabase12cR1", "zhiqiang", "", xid, "100", "Welcome1#", "ZHS16GBK", "orclbiu", "1521", "5500", "5", "true");
-		OracleOrchDatabaseAutoDeploy deploy = new OracleOrchDatabaseAutoDeploy("zhiqiang", "", "biuins4", "oc3", "/oracle/public/OL_7.2_UEKR4_x86_64", "OracleDatabase12cR1", "zhiqiang", "", xid, "100", "Welcome1#", "ZHS16GBK", "orclbiu", "1521", "5500", "5", "true", "biu_database_backup");
+		OracleOrchDatabaseAutoDeploy deploy = new OracleOrchDatabaseAutoDeploy("zhiqiang", "", "biuins4", "oc3", 
+				"/oracle/public/OL_7.2_UEKR4_x86_64", "OracleDatabase12cR1", "zhiqiang", "", xid, "100", "Welcome1#", 
+				"ZHS16GBK", "orclbiu", "1521", "5500", "5", "true", "biu_database_backup");
 		deploy.start();
 		
 		return BiuUtils.getSucReturn("XID:" + xid);

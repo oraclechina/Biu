@@ -11,11 +11,14 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class BasicAuthenticationAPI {
 
+	
+	public static String METRICENDPOINT = "https://monitoring.us.oraclecloud.com/";
 	public static String ENDPOINT = "";
 	public static String STORAGEENDPOINT = "";
 	public static String ACCEPT_COMPUTE = "application/oracle-compute-v3+json";
 	public static String ACCEPT_COMPUTE_DIR = "application/oracle-compute-v3+directory+json";
 	public static String CONTENT_TYPE = "application/oracle-compute-v3+json";
+	public static String COMMON_CONTENT_TYPE = "application/json";
 	public static String CLOUD_USERNAME = "";
 	public static String CLOUD_DOMAIN = "";
 	public static String CLOUD_PASSWORD = "";
@@ -50,6 +53,16 @@ public class BasicAuthenticationAPI {
 		log.debug("[RESP]<---" + hr);
 //		log.debug("[DETL]<---" + new XStream().toXML(hr));
 		COOKIE = hr.getHeaders().getFirst("Set-Cookie");
+		log.debug("[COOK]<---" + COOKIE);
+	}
+	
+	public static void loginMetric(String path) throws Exception {
+		log.debug("===========Metric Rest Endpoint========");
+		log.debug("[POST]--->" + METRICENDPOINT + path);
+		HttpResponse<JsonNode> hr = Unirest.get(METRICENDPOINT + path).header("Content-Type", COMMON_CONTENT_TYPE).header("X-ID-TENANT-NAME", CLOUD_DOMAIN).basicAuth(CLOUD_USERNAME, CLOUD_PASSWORD).asJson();
+		log.debug("[RESP]<---" + hr);
+		System.out.println(hr.getBody());
+//		log.debug("[DETL]<---" + new XStream().toXML(hr));
 		log.debug("[COOK]<---" + COOKIE);
 	}
 

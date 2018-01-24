@@ -45,6 +45,42 @@
 		            ]
 	            }	            		
 			]			
+        },
+		{
+            "name": "metric",
+            "endpoint": "/metric/",
+            "desc": "账单",
+            "prompt" : "list",
+			"subcommand" : [
+				{
+					"name": "MetricAPI-generateMetricReport",
+					"endpoint": "/monitoring/monitoring/{idDomainName}/.customer/api/v1/metricReports",
+		            "desc": "自动生成消费账单",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "metrictenant",
+							"endpoint": "input",
+				            "desc": "请输入根租户名, 统计全部请输入all",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            },
+				{
+					"name": "CommonAPI-tenantlist",
+					"endpoint": "/instance/{container}_/storage/volume/{container}/",
+		            "desc": "子租户用量列表(未实现)",
+		            "prompt" : "input",
+		            "subcommand" : [
+		            	{
+		            		"name": "tenantlist_name",
+							"endpoint": "input",
+				            "desc": "请输入根租户名",
+				            "prompt" : "input"
+		            	}
+		            ]
+	            }	            		
+			]			
         },        
         {
             "name": "sshkeys",
@@ -749,17 +785,23 @@
 		            	{
 		            		"name": "objsp3",
 							"endpoint": "input",
-				            "desc": "请输入精确匹配路径",
+				            "desc": "请输入精确/模糊匹配路径",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "objsp4",
 							"endpoint": "input",
-				            "desc": "请输入显示单位，G或者M，默认为M",
+				            "desc": "请输入模糊匹配层数(1-5), 若精确匹配请保持空",
 				            "prompt" : "input"
 		            	},
 		            	{
 		            		"name": "objsp5",
+							"endpoint": "input",
+				            "desc": "请输入显示单位，G或者M，默认为M",
+				            "prompt" : "input"
+		            	},
+		            	{
+		            		"name": "objsp6",
 							"endpoint": "input",
 				            "desc": "请输入展开模式，默认为list，可选择聚合操作cluster",
 				            "prompt" : "input"

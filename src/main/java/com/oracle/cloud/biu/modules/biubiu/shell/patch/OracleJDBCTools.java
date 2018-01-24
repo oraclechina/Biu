@@ -17,7 +17,7 @@ public class OracleJDBCTools {
 			String url = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + sid;
 			String user = username;
 			String password = p_password;
-			con = DriverManager.getConnection(url, user, password);// 获取连接
+			con = DriverManager.getConnection(url, user, password);
 			pre = con.prepareStatement("select count(*) from all_tables");
 			result = pre.executeQuery();
 			int scnt = result.getInt(1);

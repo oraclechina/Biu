@@ -6,7 +6,7 @@ import com.oracle.cloud.biu.utils.BiuUtils;
 
 public class TokenAPI extends Thread {
 
-	final int TOKEN_REFRESH_DELAY = 20;
+	final int TOKEN_REFRESH_DELAY = 10;
 	
 	@Override
 	public void run() {
